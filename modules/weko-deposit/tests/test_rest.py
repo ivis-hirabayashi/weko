@@ -364,147 +364,147 @@ def test_put_wf_activity_is_not_none(client, users, db,location,  es_records,db_
 
 #    def put(self, **kwargs):
 # .tox/c1/bin/pytest --cov=weko_deposit tests/test_rest.py::test_depid_item_put -vv -s --cov-branch --cov-report=term --basetemp=/code/modules/weko-deposit/.tox/c1/tmp
-def test_depid_item_put(client, users,es_records,db,mocker):
-    mocker.patch("weko_deposit.rest.db.session.remove")
-    login_user_via_session(client=client, email=users[2]['email'])
-    kwargs = {
-        #'pid_value': deposit
-        'pid_value': es_records[1][0]["deposit"].pid.pid_value
-    }
-    url = url_for('weko_deposit_rest.depid_item',
-                pid_value=kwargs['pid_value'])
-    input = {
-        "item_1617186331708": [{"subitem_1551255647225": "tetest","subitem_1551255648112": "en"}],
-        "pubdate": "2021-01-01",
-        "item_1617258105262": {
-            "resourcetype": "conference paper",
-            "resourceuri": "http://purl.org/coar/resource_type/c_5794"
-        },
-        "shared_user_id": -1,
-        "title": "tetest",
-        "lang": "en",
-        "deleted_items": ["item_1617186385884", "item_1617186419668",
-                        "approval1", "approval2"],
-        "$schema": "/items/jsonschema/15"
-    }
+def test_depid_item_put(client, users,es_records,db):
+    with patch("weko_deposit.rest.db.session.remove"):
+        login_user_via_session(client=client, email=users[2]['email'])
+        kwargs = {
+            #'pid_value': deposit
+            'pid_value': es_records[1][0]["deposit"].pid.pid_value
+        }
+        url = url_for('weko_deposit_rest.depid_item',
+                    pid_value=kwargs['pid_value'])
+        input = {
+            "item_1617186331708": [{"subitem_1551255647225": "tetest","subitem_1551255648112": "en"}],
+            "pubdate": "2021-01-01",
+            "item_1617258105262": {
+                "resourcetype": "conference paper",
+                "resourceuri": "http://purl.org/coar/resource_type/c_5794"
+            },
+            "shared_user_id": -1,
+            "title": "tetest",
+            "lang": "en",
+            "deleted_items": ["item_1617186385884", "item_1617186419668",
+                            "approval1", "approval2"],
+            "$schema": "/items/jsonschema/15"
+        }
 
-    # success case
-    res = client.put(url, data=json.dumps(input),
-                    content_type='application/json')
-    assert res.status_code == 200
-    assert json.loads(res.data) == {"status":"success"}
-
-    input = {
-        "item_1617186331708": [{"subitem_1551255647225": "tetest","subitem_1551255648112": "en"}],
-        "pubdate": "2021-01-01",
-        "item_1617258105262": {
-            "resourcetype": "conference paper",
-            "resourceuri": "http://purl.org/coar/resource_type/c_5794"
-        },
-        "shared_user_id": -1,
-        "title": "tetest",
-        "lang": "en",
-        "deleted_items": ["item_1617186385884", "item_1617186419668",
-                        "approval1", "approval2"],
-        "$schema": "/items/jsonschema/15",
-        "edit_mode":"upgrade"
-    }
-    # success case with edit_mode
-    # cur_pid = PersistentIdentifier.get('recid', kwargs['pid_value'])
-    # pid = PersistentIdentifier.get('recid', kwargs['pid_value'].split(".")[0])
-    res = client.put(url, data=json.dumps(input),
-                    content_type='application/json')
-    assert res.status_code == 200
-    assert json.loads(res.data) == {"status":"success"}
-
-    # register draft item
-    kwargs_ = {
-        'pid_value': f"{kwargs['pid_value']}.0"
-    }
-    from invenio_pidrelations.models import PIDRelation
-    from weko_records.api import ItemsMetadata, WekoRecord
-    from weko_deposit.api import WekoDeposit as aWekoDeposit
-    rec_uuid = uuid.uuid4()
-    recid = PersistentIdentifier.create("recid",str(es_records[1][1]["deposit"].pid.pid_value)+".0",object_type='rec',object_uuid=rec_uuid,status=PIDStatus.REGISTERED)
-    depid = PersistentIdentifier.create('depid',str(es_records[1][1]["deposit"].pid.pid_value)+".0",object_type='rec', object_uuid=rec_uuid,status=PIDStatus.REGISTERED)
-    rel = PIDRelation.create(recid,depid,1)
-    db.session.add(rel)
-    rel = PIDRelation.create(es_records[1][1]["parent"],recid,0,0)
-    es_records[1][1]["record_data"]["_deposit"]["id"]=str(es_records[1][1]["deposit"].pid.pid_value)+".0"
-    record = WekoRecord.create(es_records[1][1]["record_data"],id_=rec_uuid)
-    deposit = aWekoDeposit(record, record.model)
-    deposit.commit()
-    item = ItemsMetadata.create(es_records[1][1]["item_data"], id_=rec_uuid)
-    db.session.commit()
-    kwargs = {
-        #'pid_value': deposit
-        'pid_value': str(es_records[1][1]["deposit"].pid.pid_value)
-    }
-    url = url_for('weko_deposit_rest.depid_item',
-                pid_value=kwargs['pid_value'])
-    with patch("weko_deposit.api.WekoDeposit.newversion",return_value=deposit):
-        # Not Found PID in DB.
-        with patch("weko_deposit.rest.PersistentIdentifier.get",side_effect=PIDDoesNotExistError(pid_type='recid', pid_value=kwargs['pid_value'])) as mock_pid:
-            res = client.put(url, data=json.dumps(input),
+        # success case
+        res = client.put(url, data=json.dumps(input),
                         content_type='application/json')
-            assert res.status_code == 400
-            assert "Not Found PID in DB." in res.data.decode("utf-8")
+        assert res.status_code == 200
+        assert json.loads(res.data) == {"status":"success"}
 
-        # Invalid operation on PID.
-        with patch("weko_deposit.rest.PersistentIdentifier.get",side_effect=PIDInvalidAction()):
-            res = client.put(url, data=json.dumps(input),
+        input = {
+            "item_1617186331708": [{"subitem_1551255647225": "tetest","subitem_1551255648112": "en"}],
+            "pubdate": "2021-01-01",
+            "item_1617258105262": {
+                "resourcetype": "conference paper",
+                "resourceuri": "http://purl.org/coar/resource_type/c_5794"
+            },
+            "shared_user_id": -1,
+            "title": "tetest",
+            "lang": "en",
+            "deleted_items": ["item_1617186385884", "item_1617186419668",
+                            "approval1", "approval2"],
+            "$schema": "/items/jsonschema/15",
+            "edit_mode":"upgrade"
+        }
+        # success case with edit_mode
+        # cur_pid = PersistentIdentifier.get('recid', kwargs['pid_value'])
+        # pid = PersistentIdentifier.get('recid', kwargs['pid_value'].split(".")[0])
+        res = client.put(url, data=json.dumps(input),
                         content_type='application/json')
-            assert res.status_code == 400
-            assert "Invalid operation on PID." in res.data.decode("utf-8")
+        assert res.status_code == 200
+        assert json.loads(res.data) == {"status":"success"}
 
-        # Not Found Record in DB.
-        with patch("weko_deposit.rest.WekoRecord.get_record_by_pid",side_effect=WekoRecordsError("test_wr_error")):
-            res = client.put(url, data=json.dumps(input),
-                        content_type='application/json')
-            assert res.status_code == 400
-            assert "Not Found Record in DB." in res.data.decode("utf-8")
+        # register draft item
+        kwargs_ = {
+            'pid_value': f"{kwargs['pid_value']}.0"
+        }
+        from invenio_pidrelations.models import PIDRelation
+        from weko_records.api import ItemsMetadata, WekoRecord
+        from weko_deposit.api import WekoDeposit as aWekoDeposit
+        rec_uuid = uuid.uuid4()
+        recid = PersistentIdentifier.create("recid",str(es_records[1][1]["deposit"].pid.pid_value)+".0",object_type='rec',object_uuid=rec_uuid,status=PIDStatus.REGISTERED)
+        depid = PersistentIdentifier.create('depid',str(es_records[1][1]["deposit"].pid.pid_value)+".0",object_type='rec', object_uuid=rec_uuid,status=PIDStatus.REGISTERED)
+        rel = PIDRelation.create(recid,depid,1)
+        db.session.add(rel)
+        rel = PIDRelation.create(es_records[1][1]["parent"],recid,0,0)
+        es_records[1][1]["record_data"]["_deposit"]["id"]=str(es_records[1][1]["deposit"].pid.pid_value)+".0"
+        record = WekoRecord.create(es_records[1][1]["record_data"],id_=rec_uuid)
+        deposit = aWekoDeposit(record, record.model)
+        deposit.commit()
+        item = ItemsMetadata.create(es_records[1][1]["item_data"], id_=rec_uuid)
+        db.session.commit()
+        kwargs = {
+            #'pid_value': deposit
+            'pid_value': str(es_records[1][1]["deposit"].pid.pid_value)
+        }
+        url = url_for('weko_deposit_rest.depid_item',
+                    pid_value=kwargs['pid_value'])
+        with patch("weko_deposit.api.WekoDeposit.newversion",return_value=deposit):
+            # Not Found PID in DB.
+            with patch("weko_deposit.rest.PersistentIdentifier.get",side_effect=PIDDoesNotExistError(pid_type='recid', pid_value=kwargs['pid_value'])) as mock_pid:
+                res = client.put(url, data=json.dumps(input),
+                            content_type='application/json')
+                assert res.status_code == 400
+                assert "Not Found PID in DB." in res.data.decode("utf-8")
 
-        # RedisError
-        with patch("weko_deposit.rest.RedisConnection.connection",side_effect=WekoRedisError("test_redis_error")):
-            res = client.put(url, data=json.dumps(input),
-                        content_type='application/json')
-            assert res.status_code == 400
-            assert "Failed to register item!" in res.data.decode("utf-8")
+            # Invalid operation on PID.
+            with patch("weko_deposit.rest.PersistentIdentifier.get",side_effect=PIDInvalidAction()):
+                res = client.put(url, data=json.dumps(input),
+                            content_type='application/json')
+                assert res.status_code == 400
+                assert "Invalid operation on PID." in res.data.decode("utf-8")
 
-        # WekoWorkflowError
-        with patch("weko_deposit.rest.WorkActivity.get_workflow_activity_by_item_id",side_effect=WekoWorkflowError("test_wf_error")):
-            res = client.put(url, data=json.dumps(input),
-                        content_type='application/json')
-            assert res.status_code == 400
-            assert "Failed to get activity!" in res.data.decode("utf-8")
+            # Not Found Record in DB.
+            with patch("weko_deposit.rest.WekoRecord.get_record_by_pid",side_effect=WekoRecordsError("test_wr_error")):
+                res = client.put(url, data=json.dumps(input),
+                            content_type='application/json')
+                assert res.status_code == 400
+                assert "Not Found Record in DB." in res.data.decode("utf-8")
 
-        # SQLAlchemyError
-        with patch("weko_deposit.rest.PersistentIdentifier.get",side_effect=SQLAlchemyError("test_sql_error")):
-            res = client.put(url, data=json.dumps(input),
-                        content_type='application/json')
-            assert res.status_code == 400
-            assert "Failed to register item!" in res.data.decode("utf-8")
+            # RedisError
+            with patch("weko_deposit.rest.RedisConnection.connection",side_effect=WekoRedisError("test_redis_error")):
+                res = client.put(url, data=json.dumps(input),
+                            content_type='application/json')
+                assert res.status_code == 400
+                assert "Failed to register item!" in res.data.decode("utf-8")
 
-        # ElasticsearchException
-        with patch("weko_deposit.rest.PersistentIdentifier.get",side_effect=search.OpenSearchException("test_es_error")):
-            res = client.put(url, data=json.dumps(input),
-                        content_type='application/json')
-            assert res.status_code == 400
-            assert "Failed to register item!" in res.data.decode("utf-8")
+            # WekoWorkflowError
+            with patch("weko_deposit.rest.WorkActivity.get_workflow_activity_by_item_id",side_effect=WekoWorkflowError("test_wf_error")):
+                res = client.put(url, data=json.dumps(input),
+                            content_type='application/json')
+                assert res.status_code == 400
+                assert "Failed to get activity!" in res.data.decode("utf-8")
 
-        # RedisError
-        with patch("weko_deposit.rest.RedisConnection.connection",side_effect=redis.RedisError("test_redis_error")):
-            res = client.put(url, data=json.dumps(input),
-                        content_type='application/json')
-            assert res.status_code == 400
-            assert "Failed to register item!" in res.data.decode("utf-8")
+            # SQLAlchemyError
+            with patch("weko_deposit.rest.PersistentIdentifier.get",side_effect=SQLAlchemyError("test_sql_error")):
+                res = client.put(url, data=json.dumps(input),
+                            content_type='application/json')
+                assert res.status_code == 400
+                assert "Failed to register item!" in res.data.decode("utf-8")
 
-        # Exception
-        with patch("weko_deposit.rest.PersistentIdentifier.get",side_effect=Exception("test_exception")):
-            res = client.put(url, data=json.dumps(input),
-                        content_type='application/json')
-            assert res.status_code == 400
-            assert "Failed to register item!" in res.data.decode("utf-8")
+            # ElasticsearchException
+            with patch("weko_deposit.rest.PersistentIdentifier.get",side_effect=search.OpenSearchException("test_es_error")):
+                res = client.put(url, data=json.dumps(input),
+                            content_type='application/json')
+                assert res.status_code == 400
+                assert "Failed to register item!" in res.data.decode("utf-8")
+
+            # RedisError
+            with patch("weko_deposit.rest.RedisConnection.connection",side_effect=redis.RedisError("test_redis_error")):
+                res = client.put(url, data=json.dumps(input),
+                            content_type='application/json')
+                assert res.status_code == 400
+                assert "Failed to register item!" in res.data.decode("utf-8")
+
+            # Exception
+            with patch("weko_deposit.rest.PersistentIdentifier.get",side_effect=Exception("test_exception")):
+                res = client.put(url, data=json.dumps(input),
+                            content_type='application/json')
+                assert res.status_code == 400
+                assert "Failed to register item!" in res.data.decode("utf-8")
 
 # def post(self, pid, record, **kwargs):
 # .tox/c1/bin/pytest --cov=weko_deposit tests/test_rest.py::test_depid_item_post_guest -vv -s --cov-branch --cov-report=term --basetemp=/code/modules/weko-deposit/.tox/c1/tmp

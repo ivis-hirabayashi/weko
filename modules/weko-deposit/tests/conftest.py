@@ -884,6 +884,7 @@ def es_records_3(app, db, db_index, location, db_itemtype,db_oaischema):
     indexer.get_es_index()
     results = []
     with app.test_request_context():
+        recids = []
         for i in range(1, 2):
             record_data =  {"_oai": {"id": "oai:weko3.example.org:000000{:02d}".format(i), "sets": ["{}".format((i % 2) + 1)]}, "path": ["{}".format((i % 2) + 1)], "owner": "1", "recid": "{}".format(i), "title": ["title"], "pubdate": {"attribute_name": "PubDate", "attribute_value": "2022-08-20"}, "_buckets": {"deposit": "3e99cfca-098b-42ed-b8a0-20ddd09b3e02"}, "_deposit": {"id": "{}".format(i), "pid": {"type": "depid", "value": "{}".format(i), "revision_id": 0}, "owner": "1", "owners": [1], "status": "draft", "created_by": 1, "owners_ext": {"email": "wekosoftware@nii.ac.jp", "username": "", "displayname": ""}}, "item_title": "title", "author_link": [], "item_type_id": "1", "publish_date": "2022-08-20", "publish_status": "0", "weko_shared_id": -1, "item_1617186331708": {"attribute_name": "Title", "attribute_value_mlt": None}, "item_1617258105262": {"attribute_name": "Resource Type", "attribute_value_mlt": None}, "relation_version_is_last": True, 'item_1617605131499': {'attribute_name': 'File', 'attribute_type': 'file', 'attribute_value_mlt': None}}
 
@@ -910,7 +911,10 @@ def es_records_3(app, db, db_index, location, db_itemtype,db_oaischema):
             indexer.upload_metadata(record_data, rec_uuid, 1, False)
             item = ItemsMetadata.create(item_data, id_=rec_uuid)
 
-        parent = PersistentIdentifier.create('parent', "parent:1",object_type='rec', object_uuid=rec_uuid,status=PIDStatus.REGISTERED)
+        parent = PersistentIdentifier.get('parent', "parent:1")
+        if not parent:
+            parent = PersistentIdentifier.create('parent', "parent:1",object_type='rec', object_uuid=rec_uuid,status=PIDStatus.REGISTERED)
+
         for recid in recids:
             rel = PIDRelation.create(parent,recid,0,0)
             db.session.add(rel)

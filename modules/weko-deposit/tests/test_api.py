@@ -63,7 +63,7 @@ from weko_workflow.models import Activity
 from weko_workflow.utils import get_url_root
 
 from weko_deposit.api import (
-    WekoDeposit, WekoFileObject, WekoIndexer, serialize_relations,
+    WekoDeposit, WekoFileObject, WekoIndexer,
     WekoRecord, _FormatSysBibliographicInformation, _FormatSysCreator)
 from weko_deposit.config import WEKO_DEPOSIT_BIBLIOGRAPHIC_TRANSLATIONS, WEKO_DEPOSIT_ES_PARSING_ERROR_KEYWORD
 from weko_deposit.errors import WekoDepositError
@@ -267,7 +267,8 @@ class TestWekoIndexer:
             indexer, records = es_records
             version = records[0]['record']
             pid = records[0]['recid']
-            relations = serialize_relations(pid)
+            deposit = WekoDeposit()
+            relations = deposit.serialize_relations(pid)
             relations_ver = relations['version'][0]
             relations_ver['id'] = pid.object_uuid
             relations_ver['is_last'] = relations_ver.get('index') == 0
