@@ -8,7 +8,7 @@
 """Module tests."""
 import json
 import pytest
-from mock import patch, MagicMock
+from unittest.mock import patch, MagicMock
 from flask import url_for
 from flask_admin.contrib.sqla import ModelView
 from flask_admin.model.base import ViewArgs

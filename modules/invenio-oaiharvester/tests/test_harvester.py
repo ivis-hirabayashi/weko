@@ -2,7 +2,7 @@
 import pytest
 import responses
 from lxml import etree
-from mock import patch
+from unittest.mock import patch
 import copy
 import xmltodict
 import dateutil

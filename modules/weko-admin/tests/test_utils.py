@@ -1,6 +1,6 @@
 import csv
 import uuid
-from mock import patch
+from unittest.mock import patch
 from datetime import datetime, timedelta
 from flask import current_app, Markup
 from io import StringIO
@@ -2260,7 +2260,7 @@ import json
 import pytest
 from flask import current_app, make_response, request, url_for
 from flask_login import current_user
-from mock import patch
+from unittest.mock import patch
 
 from weko_admin.utils import (
     get_title_facets

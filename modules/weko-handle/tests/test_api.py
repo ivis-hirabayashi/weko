@@ -1,6 +1,6 @@
 import pytest
 import json
-from mock import patch, MagicMock
+from unittest.mock import patch, MagicMock
 from flask import Flask
 from b2handle.handleexceptions import HandleAlreadyExistsException
 

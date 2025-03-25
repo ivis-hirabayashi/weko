@@ -9,7 +9,7 @@
 import pytest
 import json
 import copy
-from mock import patch, MagicMock, Mock
+from unittest.mock import patch, MagicMock, Mock
 from datetime import datetime
 from uuid import UUID
 from io import BytesIO

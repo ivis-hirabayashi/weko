@@ -25,7 +25,7 @@ import json
 import pytest
 import uuid
 from flask import url_for
-from mock import patch, MagicMock
+from unittest.mock import patch, MagicMock
 from invenio_search.engine import search
 from invenio_indexer.api import RecordIndexer
 

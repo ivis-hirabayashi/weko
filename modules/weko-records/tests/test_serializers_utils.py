@@ -1,7 +1,7 @@
 import pytest
 import copy
 from lxml import etree
-from mock import patch, MagicMock
+from unittest.mock import patch, MagicMock
 from tests.helpers import json_data
 
 from invenio_pidstore.models import PersistentIdentifier

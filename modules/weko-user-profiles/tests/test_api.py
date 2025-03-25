@@ -25,7 +25,7 @@
 
 import pytz
 from datetime import datetime, timezone
-from mock import patch
+from unittest.mock import patch
 
 from flask import url_for,g,current_app
 from flask_login.utils import login_user

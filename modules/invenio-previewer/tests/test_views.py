@@ -11,7 +11,7 @@
 from flask import render_template_string
 
 from invenio_previewer.views import preview, dbsession_clean
-from mock import patch, MagicMock
+from unittest.mock import patch, MagicMock
 
 def test_view_macro_file_list(testapp):
     """Test file list macro."""

@@ -1,5 +1,5 @@
 import datetime
-from mock import patch
+from unittest.mock import patch
 from sqlalchemy.exc import SQLAlchemyError
 
 from invenio_stats.models import (

@@ -4,7 +4,7 @@ import pytest
 from flask import url_for,request,make_response,current_app
 from flask_login.utils import login_user,logout_user
 from flask_menu import current_menu
-from mock import patch
+from unittest.mock import patch
 from weko_accounts.api import ShibUser
 from weko_accounts.views import (
     _has_admin_access,

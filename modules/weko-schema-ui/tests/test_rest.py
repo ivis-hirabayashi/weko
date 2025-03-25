@@ -1,6 +1,6 @@
 import pytest
 import json
-from mock import patch, MagicMock
+from unittest.mock import patch, MagicMock
 from invenio_accounts.testutils import login_user_via_session
 from flask import current_app
 from invenio_records_rest.errors import InvalidDataRESTError

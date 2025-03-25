@@ -10,7 +10,7 @@
 import pytest
 import uuid
 from datetime import timedelta, datetime
-from mock import patch
+from unittest.mock import patch
 from flask import current_app
 from flask_babelex import Babel
 from werkzeug.utils import cached_property

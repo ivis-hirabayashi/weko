@@ -13,7 +13,7 @@ from __future__ import absolute_import, print_function
 
 from invenio_records.api import Record
 import pytest
-from mock import patch
+from unittest.mock import patch
 
 from invenio_communities.models import InclusionRequest
 from invenio_communities.tasks import delete_expired_requests

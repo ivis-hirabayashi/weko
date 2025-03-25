@@ -25,7 +25,7 @@ import os
 import shutil
 import tempfile
 import pytest
-from mock import MagicMock, patch
+from unittest.mock import MagicMock, patch
 from flask import Flask, json, jsonify, session, url_for
 from flask_babel import Babel
 from flask_breadcrumbs import Breadcrumbs

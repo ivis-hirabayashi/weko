@@ -1,6 +1,6 @@
 import pytest
 import json
-from mock import patch
+from unittest.mock import patch
 from sqlalchemy.exc import SQLAlchemyError
 
 from weko_indextree_journal.api import Journals

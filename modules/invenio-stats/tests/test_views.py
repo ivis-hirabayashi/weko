@@ -16,7 +16,7 @@ from invenio_stats import current_stats
 from invenio_stats.views import QueryFileStatsCount, dbsession_clean
 from flask import url_for
 
-from mock import patch
+from unittest.mock import patch
 
 CONTRIBUTOR = 0
 REPO_ADMIN = 1

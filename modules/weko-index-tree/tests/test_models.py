@@ -1,4 +1,4 @@
-from mock import patch
+from unittest.mock import patch
 
 from weko_index_tree.models import Index, IndexStyle
 

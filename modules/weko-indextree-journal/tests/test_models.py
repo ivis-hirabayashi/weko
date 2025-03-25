@@ -1,5 +1,5 @@
 
-from mock import patch
+from unittest.mock import patch
 import pytest
 
 from weko_indextree_journal.models import Journal, Journal_export_processing

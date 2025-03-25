@@ -17,7 +17,7 @@ import uuid
 from contextlib import contextmanager
 from copy import deepcopy
 import json
-from mock import Mock, MagicMock, patch
+from unittest.mock import Mock, MagicMock, patch
 from six import BytesIO
 import pytest
 from flask import Flask

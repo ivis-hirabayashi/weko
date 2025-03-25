@@ -4,9 +4,9 @@ import csv
 import os
 import json
 import pytest
-from mock import patch, MagicMock, Mock
+from unittest.mock import patch, MagicMock, Mock
 from flask_login import current_user
-from mock import patch
+from unittest.mock import patch
 from jinja2.exceptions import TemplateNotFound
 from flask import Flask, json, jsonify, session, url_for,current_app, make_response, request
 

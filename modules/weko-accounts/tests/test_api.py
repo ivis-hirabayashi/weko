@@ -1,7 +1,7 @@
 from logging import exception
 import pytest
 from datetime import datetime
-from mock import patch
+from unittest.mock import patch
 from flask import session,current_app
 from flask_login.utils import login_user
 from invenio_accounts.models import Role, User

@@ -13,7 +13,7 @@ import zipfile
 from flask import render_template_string, url_for
 from invenio_db import db
 from invenio_files_rest.models import ObjectVersion
-from mock import patch
+from unittest.mock import patch
 from six import BytesIO, b
 
 

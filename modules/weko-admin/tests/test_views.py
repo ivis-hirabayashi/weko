@@ -4,7 +4,7 @@ from flask import url_for, make_response, current_app
 from flask_babel import lazy_gettext as _
 from flask_breadcrumbs import current_breadcrumbs
 from flask_menu import current_menu
-from mock import patch, MagicMock
+from unittest.mock import patch, MagicMock
 from invenio_accounts.testutils import login_user_via_session
 from weko_records.models import SiteLicenseInfo
 from weko_admin.models import SessionLifetime, SiteInfo

@@ -2,7 +2,7 @@ import base64
 import pytest
 import werkzeug
 from io import BytesIO
-from mock import patch, MagicMock
+from unittest.mock import patch, MagicMock
 
 from jinja2.exceptions import TemplateNotFound
 from flask import current_app, url_for

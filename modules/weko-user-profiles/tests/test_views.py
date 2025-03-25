@@ -24,7 +24,7 @@
 """Tests for user profile views."""
 
 from flask import url_for, json,make_response, current_app, g, jsonify
-from mock import patch
+from unittest.mock import patch
 from flask_breadcrumbs import current_breadcrumbs
 from flask.json import JSONEncoder as BaseEncoder
 from flask_security import url_for_security

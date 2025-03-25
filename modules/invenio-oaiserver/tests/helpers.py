@@ -88,7 +88,7 @@ def run_after_insert_oai_set():
         oaiset = OAISet.query.filter_by(spec=oaiset_id).one()
         after_insert_oai_set(None, None, oaiset)
 
-from mock import patch
+from unittest.mock import patch
 def create_record(app, item_dict, mint_oaiid=True):
     """Create test record."""
     indexer = RecordIndexer()

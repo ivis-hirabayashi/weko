@@ -22,7 +22,7 @@
 
 import random
 from datetime import timedelta
-from mock import patch
+from unittest.mock import patch
 
 from flask import _request_ctx_stack, Flask, current_app, url_for, session
 

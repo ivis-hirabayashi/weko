@@ -1,7 +1,7 @@
 
 from os.path import dirname, join
 import pytest
-from mock import patch
+from unittest.mock import patch
 from flask import current_app
 
 from invenio_indexer.api import RecordIndexer

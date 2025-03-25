@@ -22,7 +22,7 @@
 """Test groups data models."""
 
 import pytest
-from mock import patch, MagicMock
+from unittest.mock import patch, MagicMock
 from flask import Flask, json, jsonify, session, url_for
 
 from weko_groups.models import Group

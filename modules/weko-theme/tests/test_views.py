@@ -1,6 +1,6 @@
 import json
 import pytest
-from mock import patch, MagicMock
+from unittest.mock import patch, MagicMock
 from flask import current_app, make_response, request
 from flask_login import current_user
 from flask import url_for

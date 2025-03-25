@@ -3,7 +3,7 @@
 """
 import json
 import pytest
-from mock import patch, MagicMock
+from unittest.mock import patch, MagicMock
 from flask import Response, current_app
 from flask_babel import get_locale
 from tests.conftest import json_data

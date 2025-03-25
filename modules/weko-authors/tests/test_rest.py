@@ -1,7 +1,7 @@
 # .tox/c1/bin/pytest --cov=weko_authors tests/test_rest.py -vv -s --cov-branch --cov-report=term --basetemp=/code/modules/weko-authors/.tox/c1/tmp
 
 import json
-from mock import patch
+from unittest.mock import patch
 from flask import Blueprint, Response
 
 from invenio_deposit.utils import check_oauth2_scope_write, \

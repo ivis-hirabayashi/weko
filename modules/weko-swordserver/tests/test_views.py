@@ -1,7 +1,7 @@
 
 from flask import url_for,json,request,abort
 import pytest
-from mock import patch
+from unittest.mock import patch
 import datetime
 from sword3common.lib.seamless import SeamlessException
 from werkzeug.datastructures import FileStorage

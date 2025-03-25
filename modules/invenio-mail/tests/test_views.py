@@ -1,5 +1,5 @@
 
-from mock import patch
+from unittest.mock import patch
 
 from invenio_mail.models import MailConfig
 from invenio_mail.views import dbsession_clean, _app

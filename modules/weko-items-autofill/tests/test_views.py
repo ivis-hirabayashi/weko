@@ -1,6 +1,6 @@
 
 import pytest
-from mock import patch
+from unittest.mock import patch
 import json
 from flask import make_response
 from invenio_accounts.testutils import login_user_via_session

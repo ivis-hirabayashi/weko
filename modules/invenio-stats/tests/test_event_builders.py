@@ -2,7 +2,7 @@ import pytest
 import tempfile
 from datetime import datetime
 from six import BytesIO
-from mock import patch
+from unittest.mock import patch
 
 from werkzeug.datastructures import ImmutableMultiDict
 

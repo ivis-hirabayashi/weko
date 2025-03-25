@@ -15,7 +15,7 @@ from flask_babel import Babel
 from flask_login import current_user
 from invenio_i18n import force_locale
 from invenio_records.api import Record
-from mock import MagicMock, Mock, patch
+from unittest.mock import MagicMock, Mock, patch
 from invenio_pidstore.models import PersistentIdentifier, PIDStatus
 from invenio_pidrelations.models import PIDRelation
 from tests.test_rest import DummySearchResult

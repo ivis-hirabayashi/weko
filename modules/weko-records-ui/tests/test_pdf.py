@@ -1,5 +1,5 @@
 import pytest
-from mock import MagicMock, patch
+from unittest.mock import MagicMock, patch
 from six import BytesIO
 from weko_records_ui.pdf import get_east_asian_width_count,make_combined_pdf
 from invenio_files_rest.models import Bucket, Location, ObjectVersion

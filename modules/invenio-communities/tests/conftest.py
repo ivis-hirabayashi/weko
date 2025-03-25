@@ -55,7 +55,7 @@ from invenio_communities import InvenioCommunities
 from invenio_communities.models import Community
 from invenio_communities.views.api import blueprint as api_blueprint
 from invenio_communities.views.ui import Blueprint
-from mock import patch
+from unittest.mock import patch
 
 @pytest.yield_fixture()
 def instance_path():

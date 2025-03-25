@@ -3,7 +3,7 @@ from flask import url_for
 
 from invenio_communities.models import Community
 from weko_index_tree.models import Index
-from mock import patch
+from unittest.mock import patch
 from invenio_accounts.testutils import create_test_user
 from invenio_communities.views.api import blueprint, dbsession_clean
 

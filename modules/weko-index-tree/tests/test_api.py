@@ -26,7 +26,7 @@ import pytest
 import copy
 import os
 from datetime import datetime
-from mock import patch, Mock, MagicMock
+from unittest.mock import patch, Mock, MagicMock
 
 from redis.exceptions import RedisError
 from opensearchpy.exceptions import NotFoundError

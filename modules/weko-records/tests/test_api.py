@@ -28,7 +28,7 @@ from invenio_records.api import Record
 from invenio_records.errors import MissingModelError
 from weko_deposit.api import WekoDeposit
 from weko_index_tree.models import Index
-from mock import patch,MagicMock
+from unittest.mock import patch,MagicMock
 import uuid
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm.exc import NoResultFound

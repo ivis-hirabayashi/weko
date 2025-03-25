@@ -29,7 +29,7 @@ from datetime import date, datetime, timedelta
 from kombu import Exchange, Queue
 
 import pytest
-from mock import Mock, patch
+from unittest.mock import Mock, patch
 from flask import Flask
 from flask_babel import Babel, lazy_gettext as _
 from flask_celeryext import FlaskCeleryExt

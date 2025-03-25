@@ -130,7 +130,7 @@ def test_clean_temp_info(instance_path):
     result = mock_temp_dir_info.get_all()
     assert list(result.keys()) == [dir_not_expire, dir_expire_after_now]
     assert os.path.exists(dir_expire_before_now) is False
-from mock import patch, MagicMock, Mock
+from unittest.mock import patch, MagicMock, Mock
 from requests.models import Response
 from invenio_oaiserver.models import OAISet
 from weko_admin.models import AdminSettings

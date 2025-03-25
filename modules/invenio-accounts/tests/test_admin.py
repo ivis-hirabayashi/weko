@@ -7,7 +7,7 @@
 # under the terms of the MIT License; see LICENSE file for more details.
 
 import pytest
-from mock import patch
+from unittest.mock import patch
 from flask import current_app, session, url_for
 from flask_security.utils import hash_password
 from invenio_db import db

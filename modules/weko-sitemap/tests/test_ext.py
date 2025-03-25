@@ -1,6 +1,6 @@
 
 import pytest
-from mock import patch
+from unittest.mock import patch
 from datetime import datetime
 from flask import current_app,make_response, url_for
 from flask_babel import format_datetime

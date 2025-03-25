@@ -1,6 +1,6 @@
 import json
 import pytest
-from mock import patch, Mock, MagicMock
+from unittest.mock import patch, Mock, MagicMock
 
 from weko_gridlayout.ext import WekoGridLayout
 

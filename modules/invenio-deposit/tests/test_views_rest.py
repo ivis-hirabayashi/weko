@@ -13,7 +13,7 @@ from __future__ import absolute_import, print_function
 
 import json
 from time import sleep
-from mock import patch
+from unittest.mock import patch
 
 import pytest
 from flask import url_for

@@ -1,6 +1,6 @@
 
 from flask import make_response,render_template,url_for
-from mock import patch, MagicMock
+from unittest.mock import patch, MagicMock
 from weko_index_tree.models import Index
 from invenio_accounts.testutils import create_test_user
 from invenio_communities.models import Community

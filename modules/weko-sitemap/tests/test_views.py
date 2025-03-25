@@ -1,6 +1,6 @@
 # .tox/c1/bin/pytest --cov=weko_sitemap tests/test_views.py -vv -s --cov-branch --cov-report=term --basetemp=/code/modules/weko-sitemap/.tox/c1/tmp
 
-from mock import patch
+from unittest.mock import patch
 from flask import url_for, current_app
 from weko_sitemap.views import dbsession_clean
 

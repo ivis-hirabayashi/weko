@@ -47,7 +47,7 @@ from invenio_accounts.testutils import login_user_via_session, client_authentica
 ######
 import json
 import pytest
-from mock import patch
+from unittest.mock import patch
 from datetime import date, datetime, timedelta
 from functools import wraps
 from operator import itemgetter

@@ -2,7 +2,7 @@
 
 from flask import url_for
 import pytest
-from mock import patch
+from unittest.mock import patch
 from invenio_accounts.testutils import login_user_via_session
 
 from weko_schema_ui.api import WekoSchema

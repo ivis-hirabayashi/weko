@@ -1,7 +1,7 @@
 import pytest
 import json
 import os
-from mock import patch
+from unittest.mock import patch
 from flask import json, url_for
 from invenio_accounts.testutils import login_user_via_session
 

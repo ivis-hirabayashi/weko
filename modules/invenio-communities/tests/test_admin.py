@@ -3,7 +3,7 @@
 from flask import url_for, current_app, make_response
 from flask_admin import Admin
 import pytest
-from mock import patch
+from unittest.mock import patch
 from invenio_accounts.testutils import login_user_via_session, create_test_user
 from invenio_access.models import ActionUsers
 from invenio_communities.models import Community

@@ -1,6 +1,6 @@
 import json
 import pytest
-from mock import patch, MagicMock
+from unittest.mock import patch, MagicMock
 
 from weko_theme.ext import WekoTheme
 

@@ -27,7 +27,7 @@ import signal
 
 import pytest
 import responses
-from mock import patch
+from unittest.mock import patch
 from invenio_db import db
 from weko_index_tree.models import Index
 from lxml import etree

@@ -1,6 +1,6 @@
 import json
 import pytest
-from mock import patch, Mock, MagicMock
+from unittest.mock import patch, Mock, MagicMock
 from flask import jsonify, url_for
 from flask_security import url_for_security
 

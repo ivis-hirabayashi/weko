@@ -1,6 +1,6 @@
 
 import pytest
-from mock import patch
+from unittest.mock import patch
 import uuid
 from flask import current_app
 from datetime import datetime

@@ -1,6 +1,6 @@
 import json
 import pytest
-from mock import patch, MagicMock
+from unittest.mock import patch, MagicMock
 from lxml import etree
 from urllib.error import URLError
 from resync.client_utils import ClientFatalError

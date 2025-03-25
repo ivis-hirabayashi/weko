@@ -2,7 +2,7 @@
 
 from flask import url_for,json
 import pytest
-from mock import patch
+from unittest.mock import patch
 from invenio_accounts.testutils import login_user_via_session
 
 # .tox/c1/bin/pytest --cov=weko_sitemap tests/test_admin.py -vv -s --cov-branch --cov-report=term --basetemp=/code/modules/weko-sitemap/.tox/c1/tmp

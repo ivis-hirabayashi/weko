@@ -13,7 +13,7 @@ import datetime
 import pytest
 import json
 import copy
-from mock import patch
+from unittest.mock import patch
 
 from invenio_stats.aggregations import filter_robots
 from invenio_stats.errors import InvalidRequestInputError

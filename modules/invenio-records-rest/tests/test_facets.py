@@ -191,7 +191,7 @@ def test_default_facets_factory(app, db, search_user, redis_connect):
     db.session.commit()
     app.config['SEARCH_UI_SEARCH_INDEX'] = 'testidx'
     app.config["RECORDS_REST_FACETS"]["testidx"] = defs
-    from mock import patch
+    from unittest.mock import patch
     with patch("weko_search_ui.permissions.search_permission.can",return_value=True):
         with patch("weko_admin.utils.get_query_key_by_permission", return_value=test_redis_key):
             with app.test_request_context("?type=a&subtype=b"):

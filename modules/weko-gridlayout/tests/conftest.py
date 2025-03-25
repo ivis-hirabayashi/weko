@@ -20,7 +20,7 @@ import pytest
 import io
 from PIL import Image
 from uuid import UUID
-from mock import patch, MagicMock
+from unittest.mock import patch, MagicMock
 from flask import Flask
 from flask_admin import Admin
 from flask_babel import Babel

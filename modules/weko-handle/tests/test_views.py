@@ -1,6 +1,6 @@
 import pytest
 import json
-from mock import patch, MagicMock
+from unittest.mock import patch, MagicMock
 from flask import Flask, json, jsonify, session, url_for
 from invenio_accounts.testutils import login_user_via_session
 

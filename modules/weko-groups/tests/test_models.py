@@ -22,7 +22,7 @@
 """Test groups data models."""
 
 import pytest
-from mock import patch, MagicMock
+from unittest.mock import patch, MagicMock
 from invenio_accounts.models import User
 from invenio_db import db
 from sqlalchemy import event

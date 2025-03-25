@@ -1,5 +1,5 @@
 
-from mock import patch
+from unittest.mock import patch
 
 from weko_authors.contrib.validation import (
     validate_by_extend_validator,

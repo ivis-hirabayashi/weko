@@ -1,5 +1,5 @@
 
-from mock import patch
+from unittest.mock import patch
 
 from invenio_cache import current_cache
 

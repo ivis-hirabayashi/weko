@@ -30,7 +30,7 @@ from datetime import date, datetime, timedelta
 
 from invenio_search_ui.ext import InvenioSearchUI
 import pytest
-from mock import Mock, patch
+from unittest.mock import Mock, patch
 from flask import Flask
 from flask_babel import Babel, lazy_gettext as _
 from flask_celeryext import FlaskCeleryExt

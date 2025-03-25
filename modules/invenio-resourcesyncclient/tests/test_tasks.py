@@ -1,5 +1,5 @@
 import pytest
-from mock import patch, MagicMock
+from unittest.mock import patch, MagicMock
 
 from invenio_resourcesyncclient.tasks import (
     is_running_task,

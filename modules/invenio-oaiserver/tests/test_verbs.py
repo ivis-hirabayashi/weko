@@ -11,7 +11,7 @@
 """Test OAI verbs."""
 
 import pytest
-from mock import patch
+from unittest.mock import patch
 import uuid
 from copy import deepcopy
 from datetime import datetime, timedelta

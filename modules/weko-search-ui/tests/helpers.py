@@ -13,7 +13,7 @@ from weko_deposit.api import WekoDeposit
 from invenio_search import InvenioSearch, RecordsSearch, current_search, current_search_client
 from invenio_search import current_search
 import pytest
-from mock import patch
+from unittest.mock import patch
 from unittest.mock import MagicMock
 from invenio_pidrelations.models import PIDRelation
 

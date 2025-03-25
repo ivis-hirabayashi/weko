@@ -1,7 +1,7 @@
 
 import pytest
 from datetime import datetime
-from mock import patch
+from unittest.mock import patch
 from sqlalchemy.exc import SQLAlchemyError
 
 from weko_admin.models import (

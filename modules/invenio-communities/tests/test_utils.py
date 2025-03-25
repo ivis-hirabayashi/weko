@@ -13,7 +13,7 @@ from __future__ import absolute_import, print_function
 
 import pytest
 import os
-from mock import patch
+from unittest.mock import patch
 from PIL import Image, ImageFilter
 from invenio_records.api import Record
 from invenio_files_rest.models import Location, Bucket, ObjectVersion

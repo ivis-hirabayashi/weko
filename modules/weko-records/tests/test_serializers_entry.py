@@ -1,7 +1,7 @@
 import pytest
 import dateutil.tz
 from copy import deepcopy
-from mock import patch, MagicMock
+from unittest.mock import patch, MagicMock
 
 from datetime import datetime, timezone
 from weko_records.serializers.entry import WekoFeedEntry

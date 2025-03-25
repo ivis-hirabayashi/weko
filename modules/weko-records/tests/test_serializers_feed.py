@@ -1,6 +1,6 @@
 import pytest
 import dateutil.tz
-from mock import patch, MagicMock
+from unittest.mock import patch, MagicMock
 from copy import deepcopy
 from datetime import datetime, timezone
 import feedgen.version

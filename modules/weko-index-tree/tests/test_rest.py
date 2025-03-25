@@ -2,7 +2,7 @@ import json
 import pytest
 from flask import current_app, url_for
 import os
-from mock import patch, MagicMock
+from unittest.mock import patch, MagicMock
 
 from invenio_accounts.testutils import login_user_via_session
 from redis.exceptions import RedisError

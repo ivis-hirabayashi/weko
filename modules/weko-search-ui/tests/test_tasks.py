@@ -3,9 +3,9 @@ import os
 import json
 import pytest
 from flask import current_app, make_response, request
-from mock import patch, MagicMock, Mock
+from unittest.mock import patch, MagicMock, Mock
 from flask_login import current_user
-from mock import patch
+from unittest.mock import patch
 
 from weko_index_tree.api import Indexes
 from weko_search_ui.tasks import (

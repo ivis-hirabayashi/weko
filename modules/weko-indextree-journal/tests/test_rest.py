@@ -6,7 +6,7 @@ import os
 import json
 import pytest
 from flask import make_response,current_app,Flask,url_for
-from mock import patch
+from unittest.mock import patch
 
 from invenio_accounts.testutils import login_user_via_session
 from invenio_records_rest.utils import obj_or_import_string

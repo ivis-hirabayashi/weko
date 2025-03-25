@@ -9,7 +9,7 @@
 """Test location related views."""
 
 import pytest
-from mock import patch
+from unittest.mock import patch
 from flask import json, url_for
 from .testutils import login_user
 

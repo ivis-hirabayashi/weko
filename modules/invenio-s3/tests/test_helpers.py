@@ -1,5 +1,5 @@
 
-from mock import patch
+from unittest.mock import patch
 from datetime import datetime
 from calendar import timegm
 

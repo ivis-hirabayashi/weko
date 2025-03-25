@@ -14,7 +14,7 @@ from jinja2.exceptions import TemplateNotFound
 from invenio_accounts.testutils import login_user_via_session
 from invenio_i18n import get_locale
 from invenio_pidstore.errors import PIDDoesNotExistError
-from mock import patch
+from unittest.mock import patch
 from weko_redis.redis import RedisConnection
 from weko_deposit.api import WekoRecord
 from weko_workflow.api import WorkActivity

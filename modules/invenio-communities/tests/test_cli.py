@@ -11,7 +11,7 @@
 
 from __future__ import absolute_import, print_function
 
-from mock import patch
+from unittest.mock import patch
 from click.testing import CliRunner
 from invenio_records.api import Record
 

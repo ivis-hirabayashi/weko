@@ -1,6 +1,6 @@
 
 from flask import current_app
-from mock import patch
+from unittest.mock import patch
 from datetime import datetime
 from celery.worker.request import Request
 from weko_sitemap.tasks import link_success_handler,link_error_handler,update_sitemap

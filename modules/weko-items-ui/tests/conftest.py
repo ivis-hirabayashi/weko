@@ -33,7 +33,7 @@ from os.path import dirname, exists, join
 import copy
 import pytest
 from kombu import Exchange, Queue
-from mock import patch
+from unittest.mock import patch
 from click.testing import CliRunner
 from flask import Blueprint, Flask
 from flask_assets import assets

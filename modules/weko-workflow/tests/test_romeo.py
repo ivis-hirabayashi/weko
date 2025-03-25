@@ -2,7 +2,7 @@
 
 from unittest.mock import MagicMock
 import pytest
-from mock import patch
+from unittest.mock import patch
 from weko_workflow.romeo import search_romeo_jtitles,search_romeo_issn,search_romeo_jtitle
 from collections import OrderedDict
 

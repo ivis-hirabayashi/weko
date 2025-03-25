@@ -2,7 +2,7 @@ import json
 import pytest
 from flask import current_app, make_response, request
 from flask_login import current_user
-from mock import patch
+from unittest.mock import patch
 from werkzeug.local import LocalProxy
 
 from invenio_accounts.testutils import login_user_via_session

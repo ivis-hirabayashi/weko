@@ -19,7 +19,7 @@ import pytz
 import uuid
 
 import pytest
-from mock import patch
+from unittest.mock import patch
 
 from flask import Flask, g, url_for
 from flask_login import LoginManager, UserMixin

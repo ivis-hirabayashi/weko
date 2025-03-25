@@ -2,7 +2,7 @@ import json
 import pytest
 from flask import current_app, make_response, request
 from flask_login import current_user
-from mock import patch, MagicMock
+from unittest.mock import patch, MagicMock
 from invenio_search.engine import dsl
 
 from weko_theme.utils import (

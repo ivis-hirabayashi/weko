@@ -2,7 +2,7 @@ import json
 import pytest
 from flask import current_app, make_response, request
 from flask_login import current_user
-from mock import patch, MagicMock
+from unittest.mock import patch, MagicMock
 
 from weko_admin.models import SearchManagement
 from weko_search_ui.api import (

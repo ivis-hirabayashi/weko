@@ -5,7 +5,7 @@ from unittest.mock import MagicMock
 import uuid
 import pytest
 import uuid
-from mock import patch
+from unittest.mock import patch
 from flask import Flask, json, jsonify, url_for, session, make_response
 from invenio_accounts.testutils import login_user_via_session as login
 from werkzeug.exceptions import InternalServerError ,NotFound,Forbidden

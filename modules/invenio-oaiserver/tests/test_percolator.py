@@ -12,7 +12,7 @@
 import uuid
 import os
 import pytest
-from mock import patch
+from unittest.mock import patch
 from flask import Flask
 from sqlalchemy_utils.functions import create_database, database_exists
 from invenio_cache import InvenioCache, current_cache

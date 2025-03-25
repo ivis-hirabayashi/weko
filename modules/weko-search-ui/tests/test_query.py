@@ -4,7 +4,7 @@ import copy
 from flask import request, url_for
 from re import L
 from opensearch_dsl.query import Match, Range, Terms, Bool
-from mock import patch, MagicMock
+from unittest.mock import patch, MagicMock
 from werkzeug.datastructures import MultiDict, CombinedMultiDict
 from invenio_accounts.testutils import login_user_via_session
 

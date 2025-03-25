@@ -1,5 +1,5 @@
 import pytest
-from mock import patch, MagicMock
+from unittest.mock import patch, MagicMock
 from tests.helpers import json_data
 
 from invenio_records_rest.schemas.json import RecordSchemaJSONV1

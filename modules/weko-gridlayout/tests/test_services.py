@@ -9,7 +9,7 @@
 import pytest
 import copy
 import json
-from mock import patch, MagicMock
+from unittest.mock import patch, MagicMock
 from datetime import datetime 
 
 from weko_gridlayout.services import (

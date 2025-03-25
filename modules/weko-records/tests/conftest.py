@@ -26,7 +26,7 @@ import shutil
 import uuid
 import json
 import tempfile
-from mock import patch
+from unittest.mock import patch
 
 import pytest
 from invenio_search.engine import dsl

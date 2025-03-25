@@ -11,7 +11,7 @@ import pytest
 from flask import url_for
 from helpers import get_json, record_url
 from invenio_pidstore.models import PersistentIdentifier, PIDStatus
-from mock import patch
+from unittest.mock import patch
 from sqlalchemy.exc import SQLAlchemyError
 from invenio_records.models import RecordMetadata
 

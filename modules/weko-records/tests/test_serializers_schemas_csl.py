@@ -1,6 +1,6 @@
 import pytest
 import copy
-from mock import patch, MagicMock
+from unittest.mock import patch, MagicMock
 from marshmallow import ValidationError
 from invenio_pidstore.models import PersistentIdentifier
 

@@ -24,7 +24,7 @@
 """Tests for user profile forms."""
 
 import pytest
-from mock import patch
+from unittest.mock import patch
 
 from wtforms import StringField
 from wtforms.validators import StopValidation,ValidationError

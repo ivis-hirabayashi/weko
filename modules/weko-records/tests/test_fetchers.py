@@ -1,5 +1,5 @@
 import pytest
-from mock import patch, MagicMock
+from unittest.mock import patch, MagicMock
 
 from weko_records.fetchers import weko_record_fetcher, weko_doi_fetcher
 

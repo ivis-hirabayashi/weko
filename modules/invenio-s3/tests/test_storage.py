@@ -20,7 +20,7 @@ from invenio_files_rest.errors import FileSizeError, StorageError, \
 from invenio_files_rest.models import Location
 from invenio_files_rest.limiters import FileSizeLimit
 from invenio_files_rest.storage import PyFSFileStorage
-from mock import patch
+from unittest.mock import patch
 from s3fs import S3File, S3FileSystem
 
 from invenio_s3 import S3FSFileStorage, config, s3fs_storage_factory

@@ -20,7 +20,7 @@
 
 """Test weko-authors models."""
 import pytest
-from mock import patch
+from unittest.mock import patch
 import json
 
 from weko_authors.models import (

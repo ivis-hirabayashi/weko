@@ -14,7 +14,7 @@ import mock
 import pytest
 from conftest import IndexFlusher
 from helpers import _mock_validate_fail, assert_hits_len, get_json, record_url
-from mock import patch
+from unittest.mock import patch
 from sqlalchemy.exc import SQLAlchemyError
 
 from invenio_records.models import RecordMetadata

@@ -6,7 +6,7 @@
 
 import pytest
 import unittest
-from mock import MagicMock, patch, PropertyMock
+from unittest.mock import MagicMock, patch, PropertyMock
 from invenio_pidstore.errors import PIDDoesNotExistError
 import json
 import os

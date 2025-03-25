@@ -22,7 +22,7 @@
 import os
 
 import pytest
-from mock import MagicMock, PropertyMock
+from unittest.mock import MagicMock, PropertyMock
 
 from invenio_oaiharvester.errors import InvenioOAIHarvesterConfigNotFound
 

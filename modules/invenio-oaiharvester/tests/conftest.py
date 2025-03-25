@@ -33,7 +33,7 @@ import tempfile
 import uuid
 from datetime import datetime
 from os.path import join
-from mock import patch
+from unittest.mock import patch
 import copy
 
 import pytest

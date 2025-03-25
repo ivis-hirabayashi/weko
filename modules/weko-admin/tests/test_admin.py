@@ -3,8 +3,8 @@ import os
 from os.path import dirname, join
 from flask import url_for,current_app,make_response
 from flask_admin import Admin
-from mock import patch
-from mock import MagicMock, patch
+from unittest.mock import patch
+from unittest.mock import MagicMock, patch
 import json
 from io import BytesIO
 import pytest
