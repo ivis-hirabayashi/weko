@@ -1187,7 +1187,7 @@ def make_record(db, indexer, i, filepath, filename, mimetype):
                 },
                 {
                     "subitem_1522300695726": "Issued",
-                    "subitem_1522300722591": "2021",
+                    "subitem_1522300722591": "2021-01-01",
                 }
             ],
         },
@@ -1599,7 +1599,7 @@ def make_record(db, indexer, i, filepath, filename, mimetype):
                         )
                     },
                     "date": [{"dateType": "Available", "dateValue": "2021-07-12"},
-                             {"dateType": "Issued", "dateValue": "2021"}],
+                             {"dateType": "Issued", "dateValue": "2021-01-01"}],
                     "format": "text/plain",
                     "filename": "{}".format(filename),
                     "filesize": [{"value": "1 KB"}],
@@ -1877,7 +1877,7 @@ def make_record(db, indexer, i, filepath, filename, mimetype):
             },
             {
                 "subitem_1522300695726": "Issued",
-                "subitem_1522300722591": "2021",
+                "subitem_1522300722591": "2021-01-01",
             }
         ],
         "item_1617186702042": [{"subitem_1551255818386": "jpn"}],
@@ -2061,7 +2061,7 @@ def make_record(db, indexer, i, filepath, filename, mimetype):
                     )
                 },
                 "date": [{"dateType": "Available", "dateValue": "2021-07-12"},
-                         {"dateType": "Issued", "dateValue": "2021"}],
+                         {"dateType": "Issued", "dateValue": "2021-01-01"}],
                 "format": "{}".format(mimetype),
                 "filename": "{}".format(filename),
                 "filesize": [{"value": "1 KB"}],
@@ -2213,7 +2213,7 @@ def make_record(db, indexer, i, filepath, filename, mimetype):
     record_data["content"] = [
         {
             "date": [{"dateValue": "2021-07-12", "dateType": "Available"},
-                     {"dateValue": "2021", "dateType": "Issued"}],
+                     {"dateValue": "2021-01-01", "dateType": "Issued"}],
             "accessrole": "open_access",
             "displaytype": "simple",
             "filename": filename,
@@ -2252,7 +2252,7 @@ def make_record(db, indexer, i, filepath, filename, mimetype):
     record_data_v1["content"] = [
         {
             "date": [{"dateValue": "2021-07-12", "dateType": "Available"},
-                     {"dateValue": "2021", "dateType": "Issued"}],
+                     {"dateValue": "2021-01-01", "dateType": "Issued"}],
             "accessrole": "open_access",
             "displaytype": "simple",
             "filename": filename,
