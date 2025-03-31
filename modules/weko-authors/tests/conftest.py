@@ -158,7 +158,7 @@ def base_app(instance_path,search_class):
         SERVER_NAME='app',
         SQLALCHEMY_DATABASE_URI=os.environ.get(
            'SQLALCHEMY_DATABASE_URI',
-           'postgresql+psycopg2://invenio:dbpass123@postgresql:5432/invenio'),
+           'postgresql+psycopg2://invenio:dbpass123@postgresql:5432/wekotest'),
         SQLALCHEMY_TRACK_MODIFICATIONS=True,
         INDEX_IMG='indextree/36466818-image.jpg',
         INDEXER_DEFAULT_INDEX="{}-authors-author-v1.0.0".format(
@@ -217,9 +217,10 @@ def db(app):
     """Database fixture."""
     if not database_exists(str(db_.engine.url)):
         create_database(str(db_.engine.url))
-        db_.create_all()
+    db_.create_all()
     yield db_
     db_.session.remove()
+    db_.drop_all()
     # drop_database(str(db_.engine.url))
 
 
@@ -251,11 +252,11 @@ def users(app, db):
         comadmin = User.query.filter_by(email='comadmin@test.org').first()
         repoadmin = User.query.filter_by(email='repoadmin@test.org').first()
         sysadmin = User.query.filter_by(email='sysadmin@test.org').first()
-        generaluser = User.query.filter_by(email='generaluser@test.org')
+        generaluser = User.query.filter_by(email='generaluser@test.org').first()
         originalroleuser = create_test_user(email='originalroleuser@test.org')
         originalroleuser2 = create_test_user(email='originalroleuser2@test.org')
         student = User.query.filter_by(email='student@test.org').first()
-        
+
     role_count = Role.query.filter_by(name='System Administrator').count()
     if role_count != 1:
         sysadmin_role = ds.create_role(name='System Administrator')
