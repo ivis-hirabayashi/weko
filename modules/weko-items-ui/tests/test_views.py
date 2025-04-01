@@ -20316,36 +20316,36 @@ def test_iframe_items_index_acl(app, client, users, id, status_code):
 
 
 # .tox/c1/bin/pytest --cov=weko_items_ui tests/test_views.py::test_iframe_items_index_get_error -v -s --cov-branch --cov-report=term --basetemp=/code/modules/weko-items-ui/.tox/c1/tmp
-def test_iframe_items_index_get_error(app, client, db_itemtype, users, db_records, db_workflow, esindex, mocker):
+def test_iframe_items_index_get_error(app, client, db_itemtype, users, db_records, db_workflow, esindex):
     login_user_via_session(client=client, email=users[0]["email"])
-    mocker.patch("weko_items_ui.views.set_files_display_type")
-    mocker.patch("weko_items_ui.views.get_thumbnails",return_value=[])
-    mocker.patch("weko_items_ui.views.update_index_tree_for_record")
-    
-    # pid_value == 0
-    url = url_for("weko_items_ui.iframe_items_index", pid_value=str(0), _external=True)
-    with patch("weko_items_ui.views.redirect",return_value=make_response()) as mock_redirect:
-        res = client.get(url)
-        mock_redirect.assert_called_with("/items/iframe")
-    
-    url = url_for("weko_items_ui.iframe_items_index", pid_value=str(1), _external=True)
-    # exist community
-    with patch("weko_workflow.api.GetCommunity.get_community_by_id", return_value="c"):
-        with client.session_transaction() as session:
-            session["itemlogin_community_id"] = "c"
-        res = client.get(url)
-        assert res.status_code == 400
-    # itemlogin_activity is None
-    with client.session_transaction() as session:
-        session["itemlogin_activity"] = None
-    res = client.get(url)
-    assert res.status_code == 400
+    with patch("weko_items_ui.views.set_files_display_type"):
+        with patch("weko_items_ui.views.get_thumbnails",return_value=[]):
+            with patch("weko_items_ui.views.update_index_tree_for_record"):
 
-    # "." not in pid_value
-    with client.session_transaction() as session:
-        session["itemlogin_activity"] = db_workflow["activity"]
-    res = client.get(url)
-    assert res.status_code == 400
+                # pid_value == 0
+                url = url_for("weko_items_ui.iframe_items_index", pid_value=str(0), _external=True)
+                with patch("weko_items_ui.views.redirect",return_value=make_response()) as mock_redirect:
+                    res = client.get(url)
+                    mock_redirect.assert_called_with("/items/iframe")
+
+                url = url_for("weko_items_ui.iframe_items_index", pid_value=str(1), _external=True)
+                # exist community
+                with patch("weko_workflow.api.GetCommunity.get_community_by_id", return_value="c"):
+                    with client.session_transaction() as session:
+                        session["itemlogin_community_id"] = "c"
+                    res = client.get(url)
+                    assert res.status_code == 400
+                # itemlogin_activity is None
+                with client.session_transaction() as session:
+                    session["itemlogin_activity"] = None
+                res = client.get(url)
+                assert res.status_code == 400
+
+                # "." not in pid_value
+                with client.session_transaction() as session:
+                    session["itemlogin_activity"] = db_workflow["activity"]
+                res = client.get(url)
+                assert res.status_code == 400
 
 # .tox/c1/bin/pytest --cov=weko_items_ui tests/test_views.py::test_iframe_items_index_update_index_error -v -s --cov-branch --cov-report=term --basetemp=/code/modules/weko-items-ui/.tox/c1/tmp
 def test_iframe_items_index_update_index_error(app, client, db_itemtype, users, db_records, db_workflow, esindex):
@@ -20961,7 +20961,7 @@ def test_prepare_edit_item_guest(client_api, users):
 
 # def ranking():
 # .tox/c1/bin/pytest --cov=weko_items_ui tests/test_views.py::test_ranking_acl_nologin -v --cov-branch --cov-report=term --basetemp=/code/modules/weko-items-ui/.tox/c1/tmp
-def test_ranking_acl_nologin(client, db_sessionlifetime, mocker):
+def test_ranking_acl_nologin(client, db_sessionlifetime):
     url = url_for("weko_items_ui.ranking", _external=True)
     os.environ['INVENIO_WEB_HOST_NAME'] = 'weko3.example.org'
     index_json = [
@@ -20970,10 +20970,10 @@ def test_ranking_acl_nologin(client, db_sessionlifetime, mocker):
         {"children":[],"cid":3,"pid":0,"name":"Index(public_state = False,harvest_public_state = True)","id":"3"},
         {"children":[],"cid":4,"pid":0,"name":"Index(public_state = False,harvest_public_state = False)","id":"4"}
     ]
-    mocker.patch("weko_items_ui.utils.Indexes.get_browsing_tree_ignore_more",return_value=index_json)
-    with patch("flask.templating._render", return_value=""):
-        res = client.get(url)
-        assert res.status_code == 200
+    with patch("weko_items_ui.utils.Indexes.get_browsing_tree_ignore_more",return_value=index_json):
+        with patch("flask.templating._render", return_value=""):
+            res = client.get(url)
+            assert res.status_code == 200
 
 
 # def check_ranking_show():

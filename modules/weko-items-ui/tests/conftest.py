@@ -175,7 +175,8 @@ def base_app(instance_path):
         SQLALCHEMY_DATABASE_URI=os.environ.get(
              "SQLALCHEMY_DATABASE_URI", "sqlite:///test.db"
         ),
-        #SQLALCHEMY_DATABASE_URI='postgresql+psycopg2://invenio:dbpass123@postgresql:5432/wekotest',
+        # SQLALCHEMY_DATABASE_URI=os.getenv('SQLALCHEMY_DATABASE_URI',
+        #                                    'postgresql+psycopg2://invenio:dbpass123@postgresql:5432/wekotest'),
         SQLALCHEMY_TRACK_MODIFICATIONS=True,
         ACCOUNTS_USERINFO_HEADERS=True,
         WEKO_PERMISSION_SUPER_ROLE_USER=[
@@ -437,13 +438,10 @@ def esindex2(app):
 @pytest.fixture()
 def users(app, db):
     """Create users."""
-    db.create_all()  # データベースの初期化
-
+    # db.create_all()  # データベースの初期化
     ds = app.extensions["invenio-accounts"].datastore
     user_count = User.query.filter_by(email="user@test.org").count()
-
     if user_count != 1:
-        # ユーザーが存在しない場合は新規作成
         user = User(email="user@test.org", password="password", active=True)
         contributor = User(email="contributor@test.org", password="password", active=True)
         comadmin = User(email="comadmin@test.org", password="password", active=True)
@@ -453,13 +451,13 @@ def users(app, db):
         originalroleuser = User(email="originalroleuser@test.org", password="password", active=True)
         originalroleuser2 = User(email="originalroleuser2@test.org", password="password", active=True)
 
-        # データベースに追加
-        db.session.add_all([user, contributor, comadmin, repoadmin, sysadmin, generaluser, originalroleuser, originalroleuser2])
-        db.session.commit()
-        print(f"User created: {user}")
+        # # データベースに追加
+        # db.session.add_all([user, contributor, comadmin, repoadmin, sysadmin, generaluser, originalroleuser, originalroleuser2])
+        # db.session.commit()
+        # print(f"User created: {user}")
 
     else:
-        # 既存のユーザーを取得
+        # Get existing users
         user = User.query.filter_by(email="user@test.org").first()
         contributor = User.query.filter_by(email="contributor@test.org").first()
         comadmin = User.query.filter_by(email="comadmin@test.org").first()
@@ -468,9 +466,9 @@ def users(app, db):
         generaluser = User.query.filter_by(email="generaluser@test.org").first()
         originalroleuser = User.query.filter_by(email="originalroleuser@test.org").first()
         originalroleuser2 = User.query.filter_by(email="originalroleuser2@test.org").first()
-        print(f"User created: {user}")
+        # print(f"User created: {user}")
 
-    # Roleの作成または取得
+    # Creating or Retrieving a Role
     role_count = Role.query.filter_by(name="System Administrator").count()
     if role_count != 1:
         sysadmin_role = ds.create_role(name="System Administrator")
@@ -540,7 +538,7 @@ def users(app, db):
         ds.add_role_to_user(originalroleuser2, originalrole)
         ds.add_role_to_user(originalroleuser2, repoadmin_role)
 
-    # 最後にユーザー情報を返す
+    # Finally return user information
     return [
         {"email": contributor.email, "id": contributor.id, "obj": contributor},
         {"email": repoadmin.email, "id": repoadmin.id, "obj": repoadmin},
@@ -606,7 +604,7 @@ def db_userprofile(app, db):
 
 @pytest.fixture()
 def db_itemtype2(app, db):
-    item_type_name = ItemTypeName(id=None,
+    item_type_name = ItemTypeName(id=2,
         name="テストアイテムタイプ2", has_site_license=True, is_active=True
     )
     item_type_schema = dict()
@@ -647,7 +645,7 @@ def db_itemtype2(app, db):
 
 @pytest.fixture()
 def db_itemtype3(app, db):
-    item_type_name = ItemTypeName(id=None,
+    item_type_name = ItemTypeName(id=3,
         name="テストアイテムタイプ3", has_site_license=True, is_active=True
     )
     item_type_schema = dict()
@@ -689,7 +687,7 @@ def db_itemtype3(app, db):
 
 @pytest.fixture()
 def db_itemtype4(app, db):
-    item_type_name = ItemTypeName(id=None,
+    item_type_name = ItemTypeName(id=4,
         name="テストアイテムタイプ4", has_site_license=True, is_active=True
     )
     item_type_schema = dict()
@@ -731,7 +729,7 @@ def db_itemtype4(app, db):
 
 @pytest.fixture()
 def db_itemtype5(app, db):
-    item_type_name = ItemTypeName(id=None,
+    item_type_name = ItemTypeName(id=5,
         name="テストアイテムタイプ5", has_site_license=True, is_active=True
     )
     item_type_schema = dict()
@@ -773,7 +771,7 @@ def db_itemtype5(app, db):
 
 @pytest.fixture()
 def db_itemtype(app, db):
-    item_type_name = ItemTypeName(id=None,
+    item_type_name = ItemTypeName(id=1,
         name="テストアイテムタイプ", has_site_license=True, is_active=True
     )
     item_type_schema = dict()
@@ -939,10 +937,14 @@ def db_workflow(app, db, db_itemtype, users):
             actionstatus_db.append(ActionStatus(**data))
         db.session.add_all(actionstatus_db)
 
+    sysadmin_user = users[2]["obj"]  # sysadmin@test.org
+    sysadmin_role = Role.query.filter_by(name="System Administrator").first()
+    
     flow_id = uuid.uuid4()
     flow_define = FlowDefine(
-        flow_id=flow_id, flow_name="Registration Flow", flow_user=1, flow_status="A"
+        flow_id=flow_id, flow_name="Registration Flow", flow_user=sysadmin_user.id, flow_status="A"
     )
+    
     flow_action1 = FlowAction(
         status="N",
         flow_id=flow_id,
@@ -978,7 +980,7 @@ def db_workflow(app, db, db_itemtype, users):
     )
     flow_action_role1 = FlowActionRole(
         flow_action_id=1,
-        action_role=1,
+        action_role=sysadmin_role.id,
         action_role_exclude=False,
         action_user=1,
         action_user_exclude=False,
@@ -986,7 +988,7 @@ def db_workflow(app, db, db_itemtype, users):
     )
     flow_action_role2 = FlowActionRole(
         flow_action_id=1,
-        action_role=1,
+        action_role=sysadmin_role.id,
         action_role_exclude=False,
         action_user=1,
         action_user_exclude=False,
@@ -1044,6 +1046,7 @@ def db_workflow(app, db, db_itemtype, users):
         db.session.add(workflow2)
         db.session.add(activity)
     db.session.commit()
+
     return {
         "flow_define": flow_define,
         "workflow": workflow1,
@@ -23177,11 +23180,13 @@ def make_record(db, indexer, i, files, thumbnail=None):
         status=PIDStatus.REGISTERED,
     )
 
-    h1 = PIDNodeVersioning(parent=parent)
-    h1.insert_child(child=recid)
-    h1.insert_child(child=recid_v1)
-    RecordDraft.link(recid, depid)
-    RecordDraft.link(recid_v1, depid_v1)
+    h1 = PIDNodeVersioning(pid=parent)
+    h1.insert_child(child_pid=recid)
+    h1.insert_child(child_pid=recid_v1)
+    PIDNodeDraft(pid=recid).insert_child(depid)
+    PIDNodeDraft(pid=recid_v1).insert_child(depid_v1)
+    # RecordDraft.link(recid, depid)
+    # RecordDraft.link(recid_v1, depid_v1)
 
     if i % 2 == 1:
         doi = PersistentIdentifier.create(
