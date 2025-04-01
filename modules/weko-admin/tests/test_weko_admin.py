@@ -89,7 +89,7 @@ def test_role_has_access(app, users):
             logout(client)
 
 # .tox/c1/bin/pytest --cov=weko_admin tests/test_weko_admin.py::test_is_accessible_to_role -vv -s --cov-branch --cov-report=term --basetemp=/code/modules/weko-admin/.tox/c1/tmp
-def test_is_accessible_to_role(app, db, users,mocker):
+def test_is_accessible_to_role(app, db, users):
     admin = WekoAdmin(app)
     with app.test_client() as client:
         login(client,users[0]["obj"])

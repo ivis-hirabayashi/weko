@@ -50,7 +50,6 @@ from weko_user_profiles import WekoUserProfiles
 
 from weko_accounts import WekoAccounts, WekoAccountsREST
 from weko_accounts.views import blueprint
-os.environ['TIKA_LOG_PATH'] = '/code/modules/weko-admin/tika.log'
 @pytest.yield_fixture()
 def instance_path():
     """Temporary instance path."""
@@ -99,7 +98,7 @@ def base_app(instance_path):
 @pytest.yield_fixture()
 def app(base_app):
     """Flask application fixture."""
-    
+
     with base_app.app_context():
         yield base_app
 @pytest.yield_fixture()
@@ -116,7 +115,7 @@ def db(app):
     db_.session.remove()
     db_.drop_all()
     # drop_database(str(db_.engine.url))
-    
+
 @pytest.yield_fixture()
 def client(app,session_time):
     """make a test client.
@@ -127,7 +126,7 @@ def client(app,session_time):
     """
     with app.test_client() as client:
         yield client
-        
+
 
 @pytest.fixture()
 def users(app, db):
@@ -154,7 +153,7 @@ def users(app, db):
         originalroleuser = create_test_user(email='originalroleuser@test.org')
         originalroleuser2 = create_test_user(email='originalroleuser2@test.org')
         student = User.query.filter_by(email='student@test.org').first()
-        
+
     role_count = Role.query.filter_by(name='System Administrator').count()
     if role_count != 1:
         sysadmin_role = ds.create_role(name='System Administrator')
@@ -265,10 +264,10 @@ def users(app, db):
 @pytest.fixture()
 def session_time(app,db):
     session_lifetime = SessionLifetime(lifetime=60,is_delete=False)
-    
+
     with db.session.begin_nested():
         db.session.add(session_lifetime)
-        
+
 @pytest.fixture
 def redis_connect(app):
     redis_connection = RedisConnection().connection(db=app.config['CACHE_REDIS_DB'], kv = True)
