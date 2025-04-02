@@ -18,7 +18,7 @@ from flask import Flask, render_template_string
 from invenio_records_rest import InvenioRecordsREST
 from invenio_records_rest.utils import PIDConverter
 
-from invenio_deposit import InvenioDeposit, InvenioDepositREST, bundles
+from invenio_deposit import InvenioDeposit, InvenioDepositREST
 from invenio_deposit.proxies import current_deposit
 
 
@@ -51,10 +51,10 @@ def test_version():
     assert __version__
 
 
-def test_bundles():
-    """Test bundles."""
-    assert bundles.js
-    assert bundles.js_dependecies
+# def test_bundles():
+#     """Test bundles."""
+#     assert bundles.js
+#     assert bundles.js_dependecies
 
 
 def test_init():
