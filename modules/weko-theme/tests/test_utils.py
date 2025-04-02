@@ -15,19 +15,19 @@ from weko_theme.utils import (
 
 
 # def get_weko_contents(getargs):
-def test_get_weko_contents(i18n_app, users, client_request_args, communities,redis_connect):
+def test_get_weko_contents(i18n_app, users, communities,redis_connect):
     with patch("flask_login.utils._get_user", return_value=users[3]['obj']):
         assert get_weko_contents('comm1')
 
 
 # def get_community_id(getargs):
-def test_get_community_id(i18n_app, users, client_request_args, communities):
+def test_get_community_id(i18n_app, users, communities):
     with patch("flask_login.utils._get_user", return_value=users[3]['obj']):
         assert get_community_id(request.args)
 
 
 # def get_design_layout(repository_id):
-def test_get_design_layout(i18n_app, users, client_request_args, communities):
+def test_get_design_layout(i18n_app, users, communities):
     assert False in get_design_layout('Root Index')
     assert False in get_design_layout(False)
 
@@ -36,7 +36,7 @@ def test_get_design_layout(i18n_app, users, client_request_args, communities):
 
 
 # def has_widget_design(repository_id, current_language):
-def test_has_widget_design(i18n_app, users, client_request_args, communities):
+def test_has_widget_design(i18n_app, users, communities):
     widget_design_setting = {
         "widget-settings": "widget-settings-9999"
     }
@@ -48,7 +48,7 @@ def test_has_widget_design(i18n_app, users, client_request_args, communities):
 
 # class MainScreenInitDisplaySetting:
 # .tox/c1/bin/pytest --cov=weko_theme tests/test_utils.py::test_get_init_display_setting -vv -s --cov-branch --cov-report=term --basetemp=/code/modules/weko-theme/.tox/c1/tmp
-def test_get_init_display_setting(i18n_app, users, client_request_args, communities):
+def test_get_init_display_setting(i18n_app, users, communities):
     def dummy_response(data):
         dummy=dsl.response.Response(dsl.Search(), json.loads(data))
         return dummy

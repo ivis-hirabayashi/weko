@@ -162,7 +162,6 @@ def instance_path():
     shutil.rmtree(path)
 
 
-@patch.dict('os.environ', {'INVENIO_OPENSEARCH_USER': 'invenio', 'INVENIO_OPENSEARCH_PASSWORD': 'openpass123!'})
 @pytest.fixture()
 def base_app(instance_path):
     """Flask application fixture."""
@@ -4426,7 +4425,7 @@ def db_admin_settings(db):
 
 
 @pytest.fixture()
-def records_rest(app, db):
+def records_rest(app, db, location):
     rec_uuid = uuid.uuid4()
 
     depid = PersistentIdentifier.create(
