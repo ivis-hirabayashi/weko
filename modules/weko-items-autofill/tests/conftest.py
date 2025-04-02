@@ -33,6 +33,7 @@ from invenio_cache import InvenioCache
 from invenio_communities.models import Community
 from invenio_db import InvenioDB
 from invenio_db import db as db_
+from invenio_files_rest.config import FILES_REST_STORAGE_CLASS_LIST
 from invenio_files_rest.models import Location
 
 from weko_search_ui.config import INDEXER_FILE_DOC_TYPE
@@ -101,6 +102,10 @@ def base_app(instance_path):
             "System Administrator",
             "Repository Administrator",
         ],
+        FILES_REST_DEFAULT_STORAGE_CLASS='S',
+        FILES_REST_STORAGE_CLASS_LIST=FILES_REST_STORAGE_CLASS_LIST,
+        FILES_REST_DEFAULT_QUOTA_SIZE=None,
+        FILES_REST_DEFAULT_MAX_FILE_SIZE=None,
     )
     Babel(app_)
     InvenioDB(app_)
@@ -374,7 +379,7 @@ def location(app, db, instance_path):
     return loc
 
 @pytest.fixture()
-def records(db):
+def records(db, location):
     record_data = json_data("data/test_records.json")
     item_data = json_data("data/test_items.json")
     

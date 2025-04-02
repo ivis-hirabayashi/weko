@@ -731,26 +731,26 @@ def test__build_name_data():
 
 # def get_crossref_creator_data(data):
 # .tox/c1/bin/pytest --cov=weko_items_autofill tests/test_utils.py::test_get_crossref_creator_data -vv -s --cov-branch --cov-report=term --basetemp=/code/modules/weko-items-autofill/.tox/c1/tmp
-def test_get_crossref_creator_data(mocker):
-    patch(
+def test_get_crossref_creator_data():
+    with patch(
         "weko_items_autofill.utils._build_name_data",
         return_value=[{"@value": "Test1 A.", "@language": "en"}],
-    )
-    data = [{"given": "A.", "family": "Test1"}]
-    result = get_crossref_creator_data(data)
-    assert result == [{"@value": "Test1 A.", "@language": "en"}]
+    ):
+        data = [{"given": "A.", "family": "Test1"}]
+        result = get_crossref_creator_data(data)
+        assert result == [{"@value": "Test1 A.", "@language": "en"}]
 
 
 # def get_crossref_contributor_data(data):
 # .tox/c1/bin/pytest --cov=weko_items_autofill tests/test_utils.py::test_get_crossref_contributor_data -vv -s --cov-branch --cov-report=term --basetemp=/code/modules/weko-items-autofill/.tox/c1/tmp
-def test_get_crossref_contributor_data(mocker):
-    patch(
+def test_get_crossref_contributor_data():
+    with patch(
         "weko_items_autofill.utils._build_name_data",
         return_value=[{"@value": "Test1 A.", "@language": "en"}],
-    )
-    data = [{"given": "A.", "family": "Test1"}]
-    result = get_crossref_contributor_data(data)
-    assert result == [{"@value": "Test1 A.", "@language": "en"}]
+    ):
+        data = [{"given": "A.", "family": "Test1"}]
+        result = get_crossref_contributor_data(data)
+        assert result == [{"@value": "Test1 A.", "@language": "en"}]
 
 
 # def get_start_and_end_page(data):
@@ -798,28 +798,28 @@ def test_get_crossref_publisher_data():
 
 # def get_crossref_relation_data(isbn, doi):
 # .tox/c1/bin/pytest --cov=weko_items_autofill tests/test_utils.py::test_get_crossref_relation_data -vv -s --cov-branch --cov-report=term --basetemp=/code/modules/weko-items-autofill/.tox/c1/tmp
-def test_get_crossref_relation_data(mocker):
-    patch(
+def test_get_crossref_relation_data():
+    with patch(
         "weko_items_autofill.utils.pack_single_value_as_dict",
         side_effect=lambda x: {"@value": x},
-    )
-    isbn = []
-    doi = "test_doi"
-    result = get_crossref_relation_data(isbn, doi)
-    assert result == [{"@value": "test_doi", "@type": "DOI"}]
+    ):
+        isbn = []
+        doi = "test_doi"
+        result = get_crossref_relation_data(isbn, doi)
+        assert result == [{"@value": "test_doi", "@type": "DOI"}]
 
-    isbn = ["test_isbn1", "test_isbn2"]
-    doi = ""
-    result = get_crossref_relation_data(isbn, doi)
-    assert result == [
-        {"@value": "test_isbn1", "@type": "ISBN"},
-        {"@value": "test_isbn2", "@type": "ISBN"},
-    ]
+        isbn = ["test_isbn1", "test_isbn2"]
+        doi = ""
+        result = get_crossref_relation_data(isbn, doi)
+        assert result == [
+            {"@value": "test_isbn1", "@type": "ISBN"},
+            {"@value": "test_isbn2", "@type": "ISBN"},
+        ]
 
-    isbn = []
-    doi = ""
-    result = get_crossref_relation_data(isbn, doi)
-    assert result == {"@value": None}
+        isbn = []
+        doi = ""
+        result = get_crossref_relation_data(isbn, doi)
+        assert result == {"@value": None}
 
 
 # def get_crossref_source_data(data):
@@ -941,7 +941,7 @@ def test_get_crossref_autofill_item(app):
 
 # def get_autofill_key_tree(schema_form, item, result=None):
 # .tox/c1/bin/pytest --cov=weko_items_autofill tests/test_utils.py::test_get_autofill_key_tree -vv -s --cov-branch --cov-report=term --basetemp=/code/modules/weko-items-autofill/.tox/c1/tmp
-def test_get_autofill_key_tree(mocker):
+def test_get_autofill_key_tree():
     # item is not dict
     result = get_autofill_key_tree({}, "item")
     assert result == None
@@ -1042,20 +1042,20 @@ def test_get_autofill_key_tree(mocker):
             "@type": "test_item8.test8_subitem1.test8_subitem3",
         },
     }
-    patch("weko_items_autofill.utils.get_key_value", side_effect=rtns)
-    result = get_autofill_key_tree({}, item)
-    assert result == test
+    with patch("weko_items_autofill.utils.get_key_value", side_effect=rtns):
+        result = get_autofill_key_tree({}, item)
+        assert result == test
 
-    # not exist creatorName, contributorName, relatedIdentifier, key_data
-    # not dict and list
-    item = {
-        "creator": {"model_id": "test_item6"},
-        "contributor": {"model_id": "test_item7"},
-        "relation": {"model_id": "test_item8"},
-        "str_key": "str_value",
-    }
-    result = get_autofill_key_tree({}, item)
-    assert result == {}
+        # not exist creatorName, contributorName, relatedIdentifier, key_data
+        # not dict and list
+        item = {
+            "creator": {"model_id": "test_item6"},
+            "contributor": {"model_id": "test_item7"},
+            "relation": {"model_id": "test_item8"},
+            "str_key": "str_value",
+        }
+        result = get_autofill_key_tree({}, item)
+        assert result == {}
 
 
 # def sort_by_item_type_order(item_forms, autofill_key_tree):
@@ -1698,7 +1698,7 @@ def test_get_workflow_journal(app, db, actions):
 
 # def convert_crossref_xml_data_to_dictionary(api_data):
 # .tox/c1/bin/pytest --cov=weko_items_autofill tests/test_utils.py::test_convert_crossref_xml_data_to_dictionary -vv -s --cov-branch --cov-report=term --basetemp=/code/modules/weko-items-autofill/.tox/c1/tmp
-def test_convert_crossref_xml_data_to_dictionary(mocker):
+def test_convert_crossref_xml_data_to_dictionary():
     data = (
         "<body>"
         '<doi type="journal_article">10.1103/PhysRev.47.777</doi>'
@@ -1721,41 +1721,41 @@ def test_convert_crossref_xml_data_to_dictionary(mocker):
     def mock_cont_data(elem, roles, rtn_data):
         rtn_data.update({"contributor": [{"given": "A.", "family": "Test1"}]})
 
-    patch(
+    with patch(
         "weko_items_autofill.utils._get_contributor_and_author_names",
         side_effect=mock_cont_data,
-    )
-    test = {
-        "response": {
-            "doi": "10.1103/PhysRev.47.777",
-            "issn": "0031-899X",
-            "contributor": [{"given": "A.", "family": "Test1"}],
-            "year": "1936",
-            "article_title": "this is article title",
-        },
-        "error": "",
-    }
-    result = convert_crossref_xml_data_to_dictionary(data)
-    assert result == test
+    ):
+        test = {
+            "response": {
+                "doi": "10.1103/PhysRev.47.777",
+                "issn": "0031-899X",
+                "contributor": [{"given": "A.", "family": "Test1"}],
+                "year": "1936",
+                "article_title": "this is article title",
+            },
+            "error": "",
+        }
+        result = convert_crossref_xml_data_to_dictionary(data)
+        assert result == test
 
-    result = convert_crossref_xml_data_to_dictionary(data,'utf-8')
-    assert result == test
+        result = convert_crossref_xml_data_to_dictionary(data,'utf-8')
+        assert result == test
 
-    data = '<?xml version="1.0" encoding="UTF-8"?>\n<crossref_result xmlns="http://www.crossref.org/qrschema/2.0" version="2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.crossref.org/qrschema/2.0 https://www.crossref.org/schema/crossref_query_output2.0.xsd"><query_result><head><doi_batch_id>none</doi_batch_id></head><body><query status="resolved" fl_count="0"><doi type="journal_article">xxx/yyy</doi><issn type="electronic">1234567</issn><journal_title>journal title</journal_title><contributors><contributor sequence="first" contributor_role="author"><given_name>John</given_name><surname>Doe</surname></contributor></contributors><year media_type="online">2018</year><publication_type>full_text</publication_type><article_title>article title</article_title></query></body></query_result></crossref_result>'
-    result = convert_crossref_xml_data_to_dictionary(data)
-    assert result == {'error': '','response': {'article_title': 'article title','contributor': [{'family': 'Test1', 'given': 'A.'}],'doi': 'xxx/yyy','journal_title': 'journal title'}}
+        data = '<?xml version="1.0" encoding="UTF-8"?>\n<crossref_result xmlns="http://www.crossref.org/qrschema/2.0" version="2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.crossref.org/qrschema/2.0 https://www.crossref.org/schema/crossref_query_output2.0.xsd"><query_result><head><doi_batch_id>none</doi_batch_id></head><body><query status="resolved" fl_count="0"><doi type="journal_article">xxx/yyy</doi><issn type="electronic">1234567</issn><journal_title>journal title</journal_title><contributors><contributor sequence="first" contributor_role="author"><given_name>John</given_name><surname>Doe</surname></contributor></contributors><year media_type="online">2018</year><publication_type>full_text</publication_type><article_title>article title</article_title></query></body></query_result></crossref_result>'
+        result = convert_crossref_xml_data_to_dictionary(data)
+        assert result == {'error': '','response': {'article_title': 'article title','contributor': [{'family': 'Test1', 'given': 'A.'}],'doi': 'xxx/yyy','journal_title': 'journal title'}}
 
-    data = '<?xml version="1.0" encoding="UTF-8"?>\n<crossref_result xmlns="http://www.crossref.org/qrschema/2.0" version="2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.crossref.org/qrschema/2.0 https://www.crossref.org/schema/crossref_query_output2.0.xsd"><query_result><head><doi_batch_id>none</doi_batch_id></head><body></body></query_result></crossref_result>'
-    result = convert_crossref_xml_data_to_dictionary(data)
-    assert result == {'error': '', 'response': {}}
+        data = '<?xml version="1.0" encoding="UTF-8"?>\n<crossref_result xmlns="http://www.crossref.org/qrschema/2.0" version="2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.crossref.org/qrschema/2.0 https://www.crossref.org/schema/crossref_query_output2.0.xsd"><query_result><head><doi_batch_id>none</doi_batch_id></head><body></body></query_result></crossref_result>'
+        result = convert_crossref_xml_data_to_dictionary(data)
+        assert result == {'error': '', 'response': {}}
 
-    data = '<crossref_result xmlns="http://www.crossref.org/qrschema/2.0" version="2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.crossref.org/qrschema/2.0 https://www.crossref.org/schema/crossref_query_output2.0.xsd"><query_result><head><doi_batch_id>none</doi_batch_id></head><body></body></query_result></crossref_result>'
-    result = convert_crossref_xml_data_to_dictionary(data)
-    assert result == {'error': '', 'response': {}}
+        data = '<crossref_result xmlns="http://www.crossref.org/qrschema/2.0" version="2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.crossref.org/qrschema/2.0 https://www.crossref.org/schema/crossref_query_output2.0.xsd"><query_result><head><doi_batch_id>none</doi_batch_id></head><body></body></query_result></crossref_result>'
+        result = convert_crossref_xml_data_to_dictionary(data)
+        assert result == {'error': '', 'response': {}}
 
-    error_data = '<?xml version="1.0" encoding="UTF-8"?>\n<crossref_result xmlns="http://www.crossref.org/qrschema/2.0" version="2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.crossref.org/qrschema/2.0 https://www.crossref.org/schema/crossref_query_output2.0.xsd"><query_result><head><doi_batch_id>none</doi_batch_id></head><body></query_result></crossref_result>'
-    result = convert_crossref_xml_data_to_dictionary(error_data)
-    assert result == {'error': 'Opening and ending tag mismatch: body line 2 and query_result, line 2, column 331 (<string>, line 2)','response': {}}
+        error_data = '<?xml version="1.0" encoding="UTF-8"?>\n<crossref_result xmlns="http://www.crossref.org/qrschema/2.0" version="2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.crossref.org/qrschema/2.0 https://www.crossref.org/schema/crossref_query_output2.0.xsd"><query_result><head><doi_batch_id>none</doi_batch_id></head><body></query_result></crossref_result>'
+        result = convert_crossref_xml_data_to_dictionary(error_data)
+        assert result == {'error': 'Opening and ending tag mismatch: body line 2 and query_result, line 2, column 331 (<string>, line 2)','response': {}}
 
 
 
