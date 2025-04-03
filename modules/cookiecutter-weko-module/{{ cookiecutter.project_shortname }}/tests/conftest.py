@@ -12,7 +12,7 @@ import tempfile
 
 import pytest
 from flask import Flask
-from flask_babelex import Babel
+from flask_babel import Babel
 
 from {{ cookiecutter.package_name }} import {{ cookiecutter.extension_class }}
 from {{ cookiecutter.package_name }}.views import blueprint

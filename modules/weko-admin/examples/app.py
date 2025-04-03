@@ -58,7 +58,7 @@ import os
 
 import pkg_resources
 from flask import Flask, redirect, url_for
-from flask_babelex import Babel
+from flask_babel import Babel
 from flask_menu import Menu
 from invenio_access import InvenioAccess
 from invenio_accounts import InvenioAccounts

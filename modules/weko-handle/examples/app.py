@@ -44,7 +44,7 @@ SPHINX-END
 from __future__ import absolute_import, print_function
 
 from flask import Flask
-from flask_babelex import Babel
+from flask_babel import Babel
 
 from weko_handle import WekoHandle
 from weko_handle.views import blueprint
