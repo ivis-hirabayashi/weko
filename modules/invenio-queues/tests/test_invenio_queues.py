@@ -11,6 +11,9 @@
 from unittest.mock import patch
 
 import pytest
+import sys
+import os
+sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
 from conftest import MOCK_MQ_EXCHANGE, mock_iter_entry_points_factory
 from flask import Flask
 from pkg_resources import EntryPoint
@@ -84,7 +87,7 @@ def test_publish_and_consume(app, test_queues, config):
 
 
 @with_different_brokers
-def test_queue_exists(app, test_queues_entrypoints, config):
+def test_queue_exists(app, set_redis_host, check_redis_connection, config):
     """Test the "declare" CLI."""
     app.config.update(config)
     with app.app_context():
@@ -93,7 +96,7 @@ def test_queue_exists(app, test_queues_entrypoints, config):
         current_queues.declare()
         for queue in current_queues.queues.values():
             # NOTE: skip existence check for redis since is not supported
-            broker_url = app.config.get("QUEUES_BROKER_URL") or ""
+            broker_url = app.config.get("CELERY_BROKER_URL") or app.config.get("BROKER_URL") or ""
             if broker_url.startswith("redis"):
                 continue
             assert queue.exists

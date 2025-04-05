@@ -12,7 +12,10 @@ from unittest.mock import patch
 
 import pytest
 from flask import Flask
-from kombu import Exchange
+from flask_babel import Babel
+from kombu import Exchange, Connection, Queue
+from invenio_stats import InvenioStats
+from invenio_queues import InvenioQueues
 
 MOCK_MQ_EXCHANGE = Exchange(
     "test_events",
@@ -88,12 +91,44 @@ def test_queues(app, test_queues_entrypoints):
 @pytest.fixture()
 def app():
     """Flask application fixture."""
-    from invenio_queues import InvenioQueues
 
     app_ = Flask("testapp")
     app_.config.update(
         SECRET_KEY="SECRET_KEY",
         TESTING=True,
+        BROKER_URL="amqp://guest:guest@rabbitmq:5672//",
+        CELERY_BROKER_URL="amqp://guest:guest@rabbitmq:5672//",
+        BABEL_DEFAULT_LOCALE='en',
+        CACHE_REDIS_URL='redis://redis:6379/0',
+        CACHE_REDIS_DB='0',
+        CACHE_REDIS_HOST="redis",
     )
     InvenioQueues(app_)
+    Babel(app_)
+    InvenioStats(app_)
     return app_
+
+@pytest.fixture()
+def set_redis_host(app):
+    """Set Redis host to 'redis'."""
+    original_queues_broker_url = app.config.get("QUEUES_BROKER_URL")
+
+    # Update the Redis host in the configuration
+    if original_queues_broker_url and "redis://" in original_queues_broker_url:
+        app.config["QUEUES_BROKER_URL"] = original_queues_broker_url.replace("localhost", "redis")
+
+    yield
+
+    # Restore the original configuration
+    app.config["QUEUES_BROKER_URL"] = original_queues_broker_url
+
+@pytest.fixture(scope="session")
+def check_redis_connection():
+    """Check Redis connection."""
+    try:
+        conn = Connection("redis://redis:6379/")
+        conn.connect()
+        assert conn.connected, "Failed to connect to Redis at redis://redis:6379/"
+        print("Redis connection successful.")
+    except Exception as e:
+        pytest.fail(f"Redis connection failed: {e}")
