@@ -15,6 +15,8 @@ These tests check if it is possible to do it.
 """
 
 import pytest
+from unittest.mock import patch
+from flask import current_app
 from flask import Blueprint, url_for
 from helpers import get_json
 from invenio_search import RecordsSearch
@@ -111,47 +113,48 @@ def test_get_record(test_custom_endpoints_app, test_records):
 )
 def test_get_records_list(test_custom_endpoints_app, indexed_records):
     """Test the creation of a custom endpoint using RecordsListResource."""
-    blueprint = Blueprint(
-        "test_invenio_records_rest",
-        __name__,
-    )
-    json_v1 = JSONSerializer(RecordSchemaJSONV1)
+    with patch.dict("os.environ", {"SEARCH_INDEX_PREFIX": ""}):
+        blueprint = Blueprint(
+            "test_invenio_records_rest",
+            __name__,
+        )
+        json_v1 = JSONSerializer(RecordSchemaJSONV1)
 
-    search_class_kwargs = {
-        "index": "test-weko"
-    }
-    from functools import partial
-    search_class=partial(RecordsSearch, **search_class_kwargs)
-    blueprint.add_url_rule(
-        "/records/",
-        view_func=RecordsListResource.as_view(
-            "recid_list",
-            minter_name="recid",
-            pid_fetcher="recid",
-            pid_type="recid",
-            search_serializers={
-                "application/json": search_responsify(json_v1, "application/json")
-            },
-            #search_class=RecordsSearch,
-            search_class=search_class,
-            read_permission_factory=allow_all,
-            create_permission_factory=allow_all,
-            search_factory=default_search_factory,
-            default_media_type="application/json",
-        ),
-    )
-    test_custom_endpoints_app.register_blueprint(blueprint)
+        search_class_kwargs = {
+            "index": "test-weko"
+        }
+        from functools import partial
+        search_class=partial(RecordsSearch, **search_class_kwargs)
+        blueprint.add_url_rule(
+            "/records/",
+            view_func=RecordsListResource.as_view(
+                "recid_list",
+                minter_name="recid",
+                pid_fetcher="recid",
+                pid_type="recid",
+                search_serializers={
+                    "application/json": search_responsify(json_v1, "application/json")
+                },
+                #search_class=RecordsSearch,
+                search_class=search_class,
+                read_permission_factory=allow_all,
+                create_permission_factory=allow_all,
+                search_factory=default_search_factory,
+                default_media_type="application/json",
+            ),
+        )
+        test_custom_endpoints_app.register_blueprint(blueprint)
 
-    with test_custom_endpoints_app.test_request_context():
-        search_url = url_for("test_invenio_records_rest.recid_list")
-    with test_custom_endpoints_app.test_client() as client:
-        # Get a query with only one record
-        res = client.get(search_url, query_string={"q": "control_number:3"})
-        record = next(iter([rec for rec in indexed_records if rec[1]["control_number"] == "3"]))
-        assert res.status_code == 200
-        data = get_json(res)
-        assert len(data["hits"]["hits"]) == 1
-        # We need to check only for select record keys, since the search engine
-        # result contains manually-injected 'suggest' properties
-        for k in ["title", "control_number"]:
-            assert record[1][k] == data["hits"]["hits"][0]["metadata"][k]
+        with test_custom_endpoints_app.test_request_context():
+            search_url = url_for("test_invenio_records_rest.recid_list")
+        with test_custom_endpoints_app.test_client() as client:
+            # Get a query with only one record
+            res = client.get(search_url, query_string={"q": "control_number:3"})
+            record = next(iter([rec for rec in indexed_records if rec[1]["control_number"] == "3"]))
+            assert res.status_code == 200
+            data = get_json(res)
+            assert len(data["hits"]["hits"]) == 1
+            # We need to check only for select record keys, since the search engine
+            # result contains manually-injected 'suggest' properties
+            for k in ["title", "control_number"]:
+                assert record[1][k] == data["hits"]["hits"][0]["metadata"][k]

@@ -54,7 +54,8 @@ from weko_redis.redis import RedisConnection
 from weko_records_ui.config import (
     WEKO_PERMISSION_ROLE_COMMUNITY,
     WEKO_PERMISSION_SUPER_ROLE_USER,
-    WEKO_RECORDS_UI_LICENSE_DICT
+    WEKO_RECORDS_UI_LICENSE_DICT,
+    WEKO_RECORDS_UI_EMAIL_ITEM_KEYS
 )
 from weko_index_tree.models import Index
 
@@ -150,7 +151,7 @@ def app(request, search_class):
         INDEXER_DEFAULT_DOC_TYPE="item-v1.0.0",
         INDEXER_DEFAULT_INDEX="{}-weko-item-v1.0.0".format("test"),
         SEARCH_ELASTIC_HOSTS=os.environ.get(
-                    'SEARCH_ELASTIC_HOSTS', 'opensearch'),
+                'SEARCH_ELASTIC_HOSTS', 'opensearch'),
         SEARCH_HOSTS=os.environ.get(
             'SEARCH_HOST', 'opensearch'
         ),
@@ -187,7 +188,7 @@ def app(request, search_class):
             )
         },
         SERVER_NAME="localhost:5000",
-        SEARCH_INDEX_PREFIX="test-",
+        # SEARCH_INDEX_PREFIX="test-",
         SEARCH_UI_SEARCH_INDEX="{}-weko".format("test"),
         CACHE_TYPE="redis",
         CACHE_REDIS_DB=0,
@@ -202,6 +203,7 @@ def app(request, search_class):
         WEKO_PERMISSION_ROLE_COMMUNITY=WEKO_PERMISSION_ROLE_COMMUNITY,
         EMAIL_DISPLAY_FLG = True,
         WEKO_RECORDS_UI_LICENSE_DICT=WEKO_RECORDS_UI_LICENSE_DICT,
+        WEKO_RECORDS_UI_EMAIL_ITEM_KEYS=WEKO_RECORDS_UI_EMAIL_ITEM_KEYS
     )
 
     #app.config["RECORDS_REST_ENDPOINTS"]["recid"]["search_class"] = \
@@ -401,7 +403,7 @@ def record_data10(indexes):
 def register_record(id, indexer, index_path):
     record_data = record_data_with_itemtype(id, index_path)
     pid, record = create_record(record_data)
-    index, doc_type = indexer.record_to_index(record)
+    index = indexer.record_to_index(record)
     es_data = {
         "title":record_data["title"],
         "control_number": str(id),
@@ -416,7 +418,6 @@ def register_record(id, indexer, index_path):
         version=record.revision_id,
         version_type=indexer._version_type,
         index=index,
-        doc_type=doc_type,
         body=es_data
     )
     return pid, record
