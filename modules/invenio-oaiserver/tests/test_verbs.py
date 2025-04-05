@@ -547,7 +547,7 @@ def test_list_sets_with_resumption_token_and_other_args(app):
     pass
 
 # .tox/c1/bin/pytest --cov=invenio_oaiserver tests/test_verbs.py::test_validate_metadata_prefix -vv -s --cov-branch --cov-report=term --basetemp=/code/modules/invenio-oaiserver/.tox/c1/tmp
-def test_validate_metadata_prefix(app, mocker):
+def test_validate_metadata_prefix(app):
     oai_metadata_formats = {
         "oai_dc": {
             "serializer": ("invenio_oaiserver.utils:dumps_etree", {"xslt_filename": "/code/modules/invenio-oaiserver/invenio_oaiserver/static/xsl/MARC21slim2OAIDC.xsl"}),
@@ -575,15 +575,15 @@ def test_validate_metadata_prefix(app, mocker):
             "serializer": ("invenio_oaiserver.utils:dumps_etree", {"schema_type": "jpcoar"})
         }
     }
-    mocker.patch("invenio_oaiserver.verbs.get_oai_metadata_formats",return_value=oai_metadata_formats)
+    with patch("invenio_oaiserver.verbs.get_oai_metadata_formats",return_value=oai_metadata_formats):
 
-    validate_metadata_prefix("jpcoar")
+        validate_metadata_prefix("jpcoar")
 
-    with pytest.raises(ValidationError) as e:
-        validate_metadata_prefix("not_oai")
-    error = e.value
-    assert error.messages == {'cannotDisseminateFormat':['The metadataPrefix "not_oai" is not supported by this repository.']}
-    assert error.field_names == ["metadataPrefix"]
+        with pytest.raises(ValidationError) as e:
+            validate_metadata_prefix("not_oai")
+        error = e.value
+        assert error.messages == {'cannotDisseminateFormat':['The metadataPrefix "not_oai" is not supported by this repository.']}
+        assert error.field_names == ["metadataPrefix"]
 
 # .tox/c1/bin/pytest --cov=invenio_oaiserver tests/test_verbs.py::test_validate_duplicate_argument -vv -s --cov-branch --cov-report=term --basetemp=/code/modules/invenio-oaiserver/.tox/c1/tmp
 def test_validate_duplicate_argument(app):

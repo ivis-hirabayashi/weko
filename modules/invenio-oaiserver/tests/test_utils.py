@@ -24,7 +24,7 @@ from tests.helpers import create_record2
 
 #def serializer(metadata_prefix):
 # .tox/c1/bin/pytest --cov=invenio_oaiserver tests/test_utils.py::test_serializer -vv -s --cov-branch --cov-report=term --basetemp=/code/modules/invenio-oaiserver/.tox/c1/tmp
-def test_serializer(app,mocker):
+def test_serializer(app):
     metadata_format = {
         "oai_dc": {
             "serializer": ("invenio_oaiserver.utils:dumps_etree", {"xslt_filename": "/code/modules/invenio-oaiserver/invenio_oaiserver/static/xsl/MARC21slim2OAIDC.xsl"}), 
@@ -37,17 +37,17 @@ def test_serializer(app,mocker):
             "serializer": "invenio_oaiserver.utils:dumps_etree"
         }, 
     }
-    mocker.patch("invenio_oaiserver.utils.get_oai_metadata_formats",return_value=metadata_format)
-    result = serializer("oai_dc")
-    
-    # serializer_ is tuple
-    assert result.func.__name__ == "dumps_etree"
-    assert result.keywords == {"xslt_filename": "/code/modules/invenio-oaiserver/invenio_oaiserver/static/xsl/MARC21slim2OAIDC.xsl"}
-    
-    # serializer_ is not tuple
-    result = serializer("ddi")
-    assert result.__name__ == "dumps_etree"
-    
+    with patch("invenio_oaiserver.utils.get_oai_metadata_formats",return_value=metadata_format):
+        result = serializer("oai_dc")
+
+        # serializer_ is tuple
+        assert result.func.__name__ == "dumps_etree"
+        assert result.keywords == {"xslt_filename": "/code/modules/invenio-oaiserver/invenio_oaiserver/static/xsl/MARC21slim2OAIDC.xsl"}
+
+        # serializer_ is not tuple
+        result = serializer("ddi")
+        assert result.__name__ == "dumps_etree"
+
 #def dumps_etree(pid, record, **kwargs):
 # .tox/c1/bin/pytest --cov=invenio_oaiserver tests/test_utils.py::test_dumps_etree -vv -s --cov-branch --cov-report=term --basetemp=/code/modules/invenio-oaiserver/.tox/c1/tmp
 def test_dumps_etree(app, db):

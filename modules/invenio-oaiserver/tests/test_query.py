@@ -8,13 +8,12 @@ from datetime import datetime
 from invenio_pidstore.models import PersistentIdentifier, PIDStatus
 from invenio_records.models import RecordMetadata
 from invenio_search import current_search_client
-from inveion_search.engine import dsl
+from invenio_search.engine import dsl
 from weko_index_tree.models import Index
 
 from invenio_oaiserver import current_oaiserver
 from invenio_oaiserver.query import (
     query_string_parser,
-    get_affected_records,
     get_records
 )
 # .tox/c1/bin/pytest --cov=invenio_oaiserver tests/test_query.py -vv -s --cov-branch --cov-report=term --cov-report=html --basetemp=/code/modules/invenio-oaiserver/.tox/c1/tmp
@@ -43,31 +42,6 @@ def test_query_string_parser(es_app):
     assert result.to_dict() == {"query_string":{"query":"test_path"}}
 
 #class OAIServerSearch(RecordsSearch):
-
-#def get_affected_records(spec=None, search_pattern=None):
-# .tox/c1/bin/pytest --cov=invenio_oaiserver tests/test_query.py::test_get_affected_records -vv -s --cov-branch --cov-report=term --basetemp=/code/modules/invenio-oaiserver/.tox/c1/tmp
-def test_get_affected_records(es_app):
-    # raise StopIteration
-    #with pytest.raises(StopIteration):
-    result = get_affected_records(None,None)
-    for i in result:
-        pass
-
-    spec="1671155386910"
-    search_path = 'path:"1671155386910"'
-    # exist spec, not exist search_path
-    result = get_affected_records(spec,None)
-    for i in result:
-        assert i
-
-    # not exist spec, exist search_path
-    result = get_affected_records(None,search_path)
-    for i in result:
-        assert i
-
-    result = get_affected_records(spec,search_path)
-    for i in result:
-        assert i
 
 #def get_records(**kwargs):
 

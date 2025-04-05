@@ -20,7 +20,7 @@ from flask import Flask
 from flask_celeryext import FlaskCeleryExt
 from flask_babel import Babel
 from sqlalchemy_utils.functions import create_database, database_exists
-from elasticsearch_dsl import response, Search
+# from elasticsearch_dsl import response, Search
 
 from invenio_access import InvenioAccess
 from invenio_accounts import InvenioAccounts
@@ -35,12 +35,16 @@ from invenio_indexer import InvenioIndexer
 from invenio_jsonschemas import InvenioJSONSchemas
 from invenio_pidstore import InvenioPIDStore
 from invenio_records import InvenioRecords
-from invenio_search import InvenioSearch
+from invenio_search import InvenioSearch, current_search_client
 from invenio_search.engine import search, dsl
 
 from weko_records.api import ItemTypes
 from weko_records.models import ItemTypeName
-from weko_records_ui.config import WEKO_RECORDS_UI_LICENSE_DICT
+from weko_records_ui.config import (
+    WEKO_RECORDS_UI_LICENSE_DICT,
+    WEKO_PERMISSION_SUPER_ROLE_USER,
+    WEKO_PERMISSION_ROLE_COMMUNITY
+)
 from weko_index_tree.models import Index
 
 from invenio_oaiserver import InvenioOAIServer
@@ -76,7 +80,7 @@ def base_app(instance_path):
         SECRET_KEY="CHANGE_ME",
         SQLALCHEMY_DATABASE_URI=os.environ.get("SQLALCHEMY_DATABASE_URI",
                                                 "sqlite:///test.db"),
-        #SQLALCHEMY_DATABASE_URI=os.getenv("SQLALCHEMY_DATABASE_URI",
+        # SQLALCHEMY_DATABASE_URI=os.getenv("SQLALCHEMY_DATABASE_URI",
         #                                  "postgresql+psycopg2://invenio:dbpass123@postgresql:5432/wekotest"),
         SQLALCHEMY_TRACK_MODIFICATIONS=True,
         SERVER_NAME="app",
@@ -107,11 +111,14 @@ def base_app(instance_path):
         ),
 
         SEARCH_CLIENT_CONFIG={"http_auth":("invenio","openpass123!"),"use_ssl":True, "verify_certs":False},
-        SEARCH_INDEX_PREFIX="test-"
+        SEARCH_INDEX_PREFIX="test-",
+        WEKO_PERMISSION_SUPER_ROLE_USER=WEKO_PERMISSION_SUPER_ROLE_USER,
+        WEKO_PERMISSION_ROLE_COMMUNITY=WEKO_PERMISSION_ROLE_COMMUNITY
     )
     if not hasattr(app_, "cli"):
-        from flask_cli import FlaskCLI
-        FlaskCLI(app_)
+        pass
+        # from flask_cli import FlaskCLI
+        # FlaskCLI(app_)
     InvenioDB(app_)
     Babel(app_)
     FlaskCeleryExt(app_)
@@ -122,6 +129,8 @@ def base_app(instance_path):
     InvenioPIDStore(app_)
     InvenioIndexer(app_)
     InvenioOAIServer(app_)
+    InvenioSearch(app_)
+    InvenioI18N(app_)
 
     app_.register_blueprint(blueprint)
 
@@ -282,33 +291,21 @@ def users(app, db):
 
 @pytest.fixture()
 def es_app(app):
-    with open(join(dirname(__file__),"data/mappings/item-v1.0.0.json"),"r") as f:
-    #with open(join(dirname(__file__),"data/v6/records/record-v1.0.0.json"),"r") as f:
+    current_search_client.indices.delete(index='test-*')
+    with open("tests/data/mappings/item-v1.0.0.json","r") as f:
         mapping = json.load(f)
-    es = search.cilent.Opensearch("http://{}:9200".format(app.config["SEARCH_ELASTIC_HOSTS"]))
+    try:
+        current_search_client.indices.create(app.config["INDEXER_DEFAULT_INDEX"],body=mapping)
+        current_search_client.indices.put_alias(index=app.config["INDEXER_DEFAULT_INDEX"], name="test-weko")
+    except:
+        current_search_client.indices.create("test-weko-items",body=mapping)
+        current_search_client.indices.put_alias(index="test-weko-items", name="test-weko")
 
-    es.indices.create(
-        index=app.config["INDEXER_DEFAULT_INDEX"],
-        body=mapping, ignore=[400, 404]
-    )
+    try:
+        yield current_search_client
+    finally:
+        current_search_client.indices.delete(index='test-*')
 
-    es.indices.put_alias(
-        index=app.config["INDEXER_DEFAULT_INDEX"],
-        name=app.config["SEARCH_UI_SEARCH_INDEX"],
-        ignore=[400, 404],
-    )
-    InvenioSearch(app, client=es)
-    #search.register_mappings("items", "tests.data")
-    yield app
-
-    es.indices.delete_alias(
-        index=app.config["INDEXER_DEFAULT_INDEX"],
-        name=app.config["SEARCH_UI_SEARCH_INDEX"],
-        ignore=[400, 404],
-    )
-    es.indices.delete(
-        index=app.config["INDEXER_DEFAULT_INDEX"],
-        ignore=[400, 404])
 
 
 @pytest.yield_fixture
@@ -533,12 +530,14 @@ def identify(app, db):
     return [iden]
 
 @pytest.fixture()
-def oaiset(app, db,without_oaiset_signals):
+def oaiset(app, db, without_oaiset_signals):
     oai = OAISet(id=1,
         spec='test',
         name='test_name',
         description='some test description',
-        search_pattern='test search')
+        search_pattern='test search',
+        system_created=True
+        )
 
     db.session.add(oai)
     db.session.commit()
