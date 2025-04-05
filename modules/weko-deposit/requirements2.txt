@@ -121,7 +121,6 @@ intervals==0.8.0
 invenio-access==2.0.0
 -e ../invenio-accounts
 invenio-admin==1.4.0
-invenio-administration==2.2.0
 invenio-app==1.5.0
 invenio-assets==2.0.1
 invenio-base==1.4.0
@@ -140,7 +139,6 @@ invenio-i18n==2.1.1
 invenio-jsonschemas==1.1.4
 invenio-logging==2.1.0
 -e ../invenio-mail
-invenio-notifications==0.5.0
 -e ../invenio-oaiharvester
 -e ../invenio-oaiserver
 -e ../invenio-oauth2server
@@ -152,11 +150,8 @@ invenio-query-parser==0.6.0
 -e ../invenio-queues
 -e ../invenio-records
 invenio-records-files==1.2.1
-invenio-records-permissions==0.19.2
-invenio-records-resources==5.5.0
 -e ../invenio-records-rest
 invenio-records-ui==1.2.0
-invenio-requests==4.1.0
 -e ../invenio-resourcesyncclient
 -e ../invenio-resourcesyncserver
 invenio-rest==1.3.0
@@ -165,8 +160,6 @@ invenio-search==2.3.1
 invenio-search-ui==2.8.5
 -e ../invenio-stats
 invenio-theme==3.1.0
-invenio-users-resources==5.1.1
-invenio-vocabularies==3.4.0
 ipaddress==1.0.19
 ipython==8.26.0
 ipython-genutils==0.2.0
