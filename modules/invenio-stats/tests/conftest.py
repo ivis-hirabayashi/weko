@@ -56,7 +56,6 @@ from werkzeug.local import LocalProxy
 
 from invenio_stats import InvenioStats, current_stats as _current_stats
 from invenio_stats.views import blueprint
-from invenio_stats.contrib.registrations import register_queries
 from invenio_stats.contrib.config import (
     AGGREGATIONS_CONFIG,
     EVENTS_CONFIG,
@@ -71,6 +70,7 @@ from invenio_stats.contrib.event_builders import (
 from invenio_stats.processors import EventsIndexer, anonymize_user
 from invenio_stats.models import StatsEvents, StatsAggregation, StatsBookmark
 from invenio_stats.tasks import aggregate_events, process_events
+from invenio_queues.proxies import current_queues
 from opensearchpy import OpenSearch
 
 
@@ -146,7 +146,9 @@ def query_entrypoints(custom_permission_factory):
     )]
 
     result += conf
-    result += register_queries()
+    # from invenio_stats import get_register_queries
+    # register_queries = get_register_queries()
+    # result += register_queries()
     entrypoint.load = lambda conf=conf: (lambda: result)
     data.append(entrypoint)
 
@@ -258,8 +260,8 @@ def base_app(instance_path, mock_gethostbyaddr):
         STATS_AGGREGATIONS=STATS_AGGREGATIONS,
         STATS_EXCLUDED_ADDRS=[],
         STATS_EVENT_STRING='events',
-        INDEXER_MQ_QUEUE=Queue("indexer", exchange=Exchange(
-            "indexer", type="direct"), routing_key="indexer", queue_arguments={"x-queue-type": "quorum"}),
+        INDEXER_MQ_QUEUE=Queue("indexer",
+                               exchange=Exchange("indexer", type="direct"), routing_key="indexer", queue_arguments={"x-queue-type": "quorum"}),
         INDEXER_DEFAULT_INDEX="{}-weko-item-v1.0.0".format("test"),
         SEARCH_UI_SEARCH_INDEX="{}-weko-item-v1.0.0".format("test"),
         I18N_LANGUAGES=[('en', 'English'), ('ja', 'Japanese')],
@@ -866,7 +868,8 @@ def generate_file_events(
                         "item_title": "test_item",
                         "remote_addr": "test_remote_addr",
                         "hostname": "test_hostname",
-                        "unique_session_id": "xxxxxxx"
+                        "unique_session_id": "xxxxxxx",
+                        "event_type": event_type
                     }
 
                 for event_idx in range(event_number):

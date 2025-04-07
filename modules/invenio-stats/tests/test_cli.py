@@ -267,7 +267,7 @@ def test_events_restore(app, script_info, es, db, event_queues):
     ],
     indirect=["indexed_file_download_events"]
 )
-def test_aggregations_process(script_info, event_queues, es, indexed_file_download_events):
+def test_aggregations_process(app, script_info, es, event_queues, indexed_file_download_events):
     """Test "aggregations process" CLI command."""
     search_obj = dsl.Search(using=es)
     runner = CliRunner()
@@ -405,7 +405,7 @@ def test_aggregations_delete(
     indirect=["aggregated_file_download_events"],
 )
 def test_aggregations_list_bookmarks(
-    db, script_info, event_queues, es, aggregated_file_download_events
+    app, db, script_info, event_queues, es, aggregated_file_download_events
 ):
     with app.app_context():
         """Test "aggregations list-bookmarks" CLI command."""
