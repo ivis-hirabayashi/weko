@@ -42,7 +42,6 @@ from invenio_previewer import InvenioPreviewer
 def app():
     """Flask application fixture with database initialization."""
     instance_path = tempfile.mkdtemp()
-
     app_ = Flask(
         'testapp', static_folder=instance_path, instance_path=instance_path)
     app_.config.update(
@@ -60,7 +59,7 @@ def app():
             recid_previewer=dict(
                 pid_type='recid',
                 route='/records/<pid_value>/preview/<filename>',
-                view_imp='invenio_previewer.views:preview',
+                view_imp='invenio_previewer.views.preview',
                 record_class='invenio_records_files.api:Record',
             ),
             recid_files=dict(
@@ -71,7 +70,8 @@ def app():
             ),
         ),
         SERVER_NAME='localhost',
-        SECRET_KEY="SECRET_KEY"
+        SECRET_KEY="SECRET_KEY",
+        APP_THEME =['bootstrap3'],
     )
     Babel(app_)
     assets_ext = InvenioAssets(app_)
@@ -172,11 +172,13 @@ def webassets(testapp):
     theme_bundle.aliases["../../theme.config"] = THEME_CONFIG_PATH
 
     current_webpack.project.create()
-    current_webpack.project.install()
+    current_webpack.project.install("--legacy-peer-deps")
 
     # create a fake theme config file from the example one
     _assets = os.path.join(testapp.instance_path, "assets")
-    example = os.path.join(_assets, "less", "invenio_theme", "theme.config.example")
+    example = os.path.join(_assets, "less", "weko_theme", "theme.config")
+    data = os.path.join(testapp.instance_path, "data")
+
     with open(example, "r") as fi:
         with open(os.path.join(_assets, THEME_CONFIG_PATH), "w") as fo:
             for line in fi:
@@ -186,6 +188,19 @@ def webassets(testapp):
                     fo.write("@siteFolder: 'default';")
                 else:
                     fo.write(line)
+
+    # Copy source path
+    source_path = os.path.join(_assets, 'css', 'weko_theme', '_variables.scss')
+
+    # Copy destination path
+    destination_path = os.path.join(testapp.instance_path, "data", "_variables.scss")
+
+    # Copy the file
+    if os.path.exists(source_path):
+        os.makedirs(os.path.dirname(destination_path), exist_ok=True)  # Create a destination directory
+        shutil.copy(source_path, destination_path)
+    else:
+        print(f"Source file does not exist: {source_path}")
 
     current_webpack.project.build()
 
@@ -258,9 +273,10 @@ def zip_fp(db):
 @pytest.yield_fixture()
 def db(app):
     """Database fixture."""
+    db_.drop_all()
     if not database_exists(str(db_.engine.url)):
         create_database(str(db_.engine.url))
-        db_.create_all()
+    db_.create_all()
     yield db_
     db_.session.remove()
-    # db_.drop_all()
+    db_.drop_all()

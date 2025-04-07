@@ -44,7 +44,7 @@ def preview_url(pid_val, filename):
     )
 
 
-def test_default_extension(testapp, webassets, record):
+def test_default_extension(testapp, webassets, record, location):
     """Test view by default."""
     create_file(record, "testfile", BytesIO(b"empty"))
 
